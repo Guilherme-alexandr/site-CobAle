@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Negociação | CobAle</title>
+  <link rel="stylesheet" href="../css/negociacao.css">
+  <script src="../javascript/calculadora.js"></script>
+  <script src="../javascript/negociacao.js"></script>
+</head>
+<body>
+<header>
+  <div class="logo"><strong>CobAle</strong></div>
+  <h1>Negociação de Cliente</h1>
+  <button class="botao-voltar" onclick="window.history.back()">Voltar</button>
+</header>
+
+<main>
+  <div class="coluna-esquerda">
+    <section id="info-cliente">
+      <h2>Informações do Cliente</h2>
+      <p><strong>Nome/Razão Social:</strong> <span id="nomeCliente"></span></p>
+      <p><strong>CPF/CNPJ:</strong> <span id="cpfCliente"></span></p>
+      <p><strong>Email:</strong> <span id="emailCliente"></span></p>
+    </section>
+
+    <section>
+      <h2>Contatos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaContatos"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Contratos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Vencimento</th>
+            <th>Valor</th>
+            <th>Atraso</th>
+            <th>Status</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaContratos"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="coluna-direita">
+    <section>
+      <h2>Eventos e Ações</h2>
+      <p>Aqui aparecerão eventos relacionados ao cliente e o botão para cálculo do acordo.</p>
+
+      <button id="AbrirCalculadora">Abrir Calculadora</button>
+
+      <!-- Popup da Calculadora -->
+      <div id="popupCalculadora" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; border:2px solid black; padding:20px; z-index:1000; width:800px;">
+        <div style="display:flex; justify-content:space-between; align-items: center;">
+          <div>
+            <label><strong>Data de vencimento do acordo</strong></label><br>
+            <input type="date" id="dataVencimento">
+          </div>
+          <button onclick="fecharCalculadora()" style="height:30px;" title="Fechar popup">Fechar</button>
+        </div>
+
+        <hr style="margin:15px 0;">
+
+        <div style="display:flex; gap:20px;">
+          <!-- Coluna Esquerda -->
+          <div style="flex:1;">
+            <label><strong>Entrada (R$)</strong></label><br>
+            <input type="number" id="valorEntrada" placeholder="0,00"><br><br>
+
+            <label><strong>Parcelas</strong></label><br>
+            <input type="number" id="numeroParcelas" min="2" max="24" value="2"><br><br>
+
+            <table border="1" style="width:100%; text-align:center;">
+              <thead>
+                <tr>
+                  <th>Parcela</th>
+                  <th>Vencimento</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaParcelas">
+                <!-- Gerado via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Coluna Direita -->
+          <div style="flex:0.7;">
+            <label><strong>Desconto total</strong></label><br>
+            <input type="text" id="campoDesconto" readonly><br><br>
+
+            <label><strong>Juros total</strong></label><br>
+            <input type="text" id="campoJuros" readonly><br><br>
+
+            <label><strong>Valor final</strong></label><br>
+            <input type="text" id="campoValorFinal" readonly><br><br>
+            
+            <button id="btnAtualizarCalculo" style="margin-bottom: 10px;">Atualizar Cálculo</button>
+            <button onclick="formalizarAcordo()">Formalizar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultado do Acordo -->
+      <div id="resultadoAcordo"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 CobAle. Todos os direitos reservados.</p>
+</footer>
+
+
+
+
+</body>
+</html>

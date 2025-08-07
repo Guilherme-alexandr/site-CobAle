@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pesquisa - CobAle</title>
+    <link rel="stylesheet" href="../css/pesquisa.css" />
+</head>
+<body>
+
+    <h2>Consulta de Contratos - CobAle</h2>
+
+    <div class="filtros">
+        <label for="cpf">Buscar por CPF:
+            <input type="text" id="cpf" placeholder="Ex: 12345678901"/>
+        </label>
+        <button onclick="buscarPorCpf()">Buscar</button>
+    </div>
+
+    <table id="resultado">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Nº Contrato</th>
+                <th>Valor Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="../javascript/pesquisa.js"></script>
+
+</body>
+</html>
