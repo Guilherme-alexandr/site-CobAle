@@ -2,6 +2,7 @@ console.log("calculadora.js carregado!");
 
 let contratoGlobal = null;
 let clienteIdGlobal = null;
+let acordoGlobal = null;
 
 function abrirCalculadora() {
     document.getElementById("popupCalculadora").style.display = "block";
@@ -30,6 +31,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const campoDesconto = document.getElementById("campoDesconto");
     const campoValorFinal = document.getElementById("campoValorFinal");
     const tabelaParcelas = document.getElementById("tabelaParcelas");
+    const campoDiasAtraso = document.getElementById("campoDiasAtraso");
+    const campoValorComJuros = document.getElementById("campoValorComJuros");
+
 
     const params = new URLSearchParams(window.location.search);
     const numeroContrato = params.get("contrato");
@@ -107,6 +111,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const dados = await resposta.json();
 
+            campoDiasAtraso.value = `${dados.dias_em_atraso} dia(s)`;
+            campoValorComJuros.value = `R$ ${(dados.valor_original + dados.juros_total).toFixed(2)}`;
             campoJuros.value = `R$ ${dados.juros_total.toFixed(2)}`;
             campoDesconto.value = `${dados.percentual_desconto}% (R$ ${dados.valor_desconto.toFixed(2)})`;
             campoValorFinal.value = `R$ ${dados.valor_final.toFixed(2)}`;
@@ -160,8 +166,8 @@ async function formalizarAcordo() {
     if (!contratoGlobal) return;
 
     const vencimento = document.getElementById("dataVencimento").value;
-    const entrada = parseFloat(document.getElementById("valorEntrada").value || 0);
-    const parcelas = parseInt(document.getElementById("numeroParcelas").value || 0);
+    const entrada = parseFloat(document.getElementById("valorEntrada").value) || 0;
+    const parcelas = parseInt(document.getElementById("numeroParcelas").value) || 0;
     const tipo_pagamento = (entrada || parcelas > 1) ? "parcelado" : "avista";
 
     const payload = {
@@ -169,27 +175,191 @@ async function formalizarAcordo() {
         tipo_pagamento,
         qtd_parcelas: parcelas,
         valor_entrada: entrada,
-        vencimento
+        vencimento: vencimento,
     };
-
     try {
-        const resposta = await fetch("http://127.0.0.1:5000/acordos", {
+        const resposta = await fetch("http://127.0.0.1:5000/acordos/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         });
-
-        if (!resposta.ok) {
-            const erro = await resposta.json();
-            throw new Error(erro.erro || "Erro ao formalizar o acordo");
-        }
+        if (!resposta.ok) throw new Error("Erro ao formalizar acordo.");
 
         const resultado = await resposta.json();
-        alert("Acordo formalizado com sucesso!");
-        console.log("Acordo:", resultado);
+
         fecharCalculadora();
+        document.getElementById("AbrirCalculadora").style.display = "none";
+        renderizarResumoAcordo(resultado);
     } catch (e) {
         console.error("Erro ao formalizar acordo:", e);
-        alert(`Erro ao formalizar o acordo: ${e.message}`);
+        alert(`Erro ao formalizar acordo: ${e.message}`);
     }
+}
+
+function renderizarResumoAcordo(acordo) {
+    const container = document.getElementById("resultadoAcordo");
+
+    const parcelasHtml = acordo.parcelamento ? gerarTabelaParcelas(acordo.parcelamento) : "";
+
+    const valorTotal = acordo.valor_total || acordo.valor_final || 0;
+    const diasAtraso = acordo.dias_em_atraso || 0;
+    const parcelas = acordo.parcelamento?.quantidade_parcelas || acordo.qtd_parcelas || 1;
+
+    container.innerHTML = `
+        <div class="acordo-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
+            <h3>Acordo Formalizado</h3>
+            <div class="acoes-wrapper">
+                <button class="btn-acoes" onclick="toggleMenuAcoes()">⚙️ Ações</button>
+                <div id="menuAcoesAcordo" class="menu-acoes" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">
+                <button onclick="editarAcordo()">📝 Editar</button>
+                <button onclick="deletarAcordo()">🗑️ Excluir</button>
+                </div>
+            </div>
+            </div>
+
+            <p><strong>Valor total do acordo:</strong> R$ ${valorTotal.toFixed(2)}</p>
+            <p><strong>Dias em atraso:</strong> ${diasAtraso} dias</p>
+            <p><strong>Parcelamento:</strong> ${parcelas}x</p>
+
+            ${parcelasHtml}
+        </div>
+        `;
+
+}
+
+function gerarTabelaParcelas(parcelamento) {
+    const { quantidade_parcelas, valor_parcela, entrada } = parcelamento;
+
+    let linhas = "";
+
+    const hoje = new Date();
+    for (let i = 0; i < quantidade_parcelas; i++) {
+        const vencimento = new Date(hoje);
+        vencimento.setMonth(vencimento.getMonth() + i);
+        const dataFormatada = vencimento.toLocaleDateString("pt-BR");
+
+        linhas += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${dataFormatada}</td>
+                <td>R$ ${valor_parcela.toFixed(2)}</td>
+            </tr>
+        `;
+    }
+
+    if (entrada > 0) {
+        linhas = `
+            <tr>
+                <td>Entrada</td>
+                <td>${hoje.toLocaleDateString("pt-BR")}</td>
+                <td>R$ ${entrada.toFixed(2)}</td>
+            </tr>
+        ` + linhas;
+    }
+
+    return `
+        <table class="tabela-acordo">
+            <thead>
+                <tr>
+                    <th>Parcela</th>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${linhas}
+            </tbody>
+        </table>
+    `;
+}
+
+function toggleMenuAcoes() {
+    const menu = document.getElementById("menuAcoesAcordo");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+async function editarAcordo() {
+  toggleMenuAcoes();
+
+  try {
+    const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
+    const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+
+    if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
+
+    const acordo = await respostaAcordo.json();
+    window.acordoGlobal = acordo;
+
+    document.getElementById("numeroParcelas").value = acordo.qtd_parcelas || 1;
+    document.getElementById("valorEntrada").value = acordo.valor_entrada || 0;
+    document.getElementById("btnFormalizar").style.display = "none";
+    document.getElementById("btnSalvarEdicao").style.display = "inline-block";
+
+    document.getElementById("popupCalculadora").style.display = "block";
+
+  } catch (erro) {
+    console.error("Erro ao carregar acordo para edição:", erro);
+    alert("Erro ao carregar acordo para edição.");
+  }
+}
+
+
+
+function fecharPopupEditarAcordo() {
+    document.getElementById("popupEditarAcordo").style.display = "none";
+}
+async function salvarAcordoEditado() {
+  try {
+    const resposta = await fetch(`http://127.0.0.1:5000/acordos/${window.acordoGlobal.id}`, {
+      method: "DELETE"
+    });
+
+    if (!resposta.ok) throw new Error("Erro ao remover acordo antigo.");
+
+    await formalizarAcordo();
+
+    alert("Acordo atualizado com sucesso.");
+    
+    document.getElementById("btnSalvarEdicao").style.display = "none";
+    document.getElementById("btnFormalizar").style.display = "inline-block";
+
+  } catch (e) {
+    console.error("Erro ao atualizar acordo:", e);
+    alert("Erro ao atualizar acordo.");
+  }
+}
+
+
+
+
+async function deletarAcordo() {
+  toggleMenuAcoes();
+
+  const confirmacao = confirm("Tem certeza que deseja excluir este acordo?");
+  if (!confirmacao) return;
+
+  try {
+    const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
+    const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+    if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
+
+    const acordo = await respostaAcordo.json();
+
+    const resposta = await fetch(`http://127.0.0.1:5000/acordos/${acordo.id}`, {
+      method: "DELETE",
+    });
+
+    if (!resposta.ok) throw new Error("Erro ao excluir acordo.");
+
+    alert("Acordo excluído com sucesso.");
+    document.getElementById("resultadoAcordo").innerHTML = "";
+
+    const btnCalc = document.getElementById("AbrirCalculadora");
+    if (btnCalc) btnCalc.style.display = "inline-block";
+
+  } catch (erro) {
+    console.error("Erro ao excluir acordo:", erro);
+    alert("Erro ao excluir o acordo.");
+  }
 }

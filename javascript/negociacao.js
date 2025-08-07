@@ -1,11 +1,24 @@
-const params = new URLSearchParams(window.location.search);
-const cpf = params.get('cpf');
+let clienteGlobal = null;
 
-if (!cpf) {
-    alert("CPF não informado na URL.");
-} else {
-    buscarClientePorCpf(cpf);
-}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const cpf = params.get("cpf");
+    const numeroContrato = params.get("contrato");
+
+    if (!cpf) {
+        alert("CPF não informado na URL.");
+    } else {
+        buscarClientePorCpf(cpf);
+    }
+
+    if (numeroContrato) {
+        verificarAcordoAtivo(numeroContrato);
+    } else {
+        console.warn("Número do contrato não encontrado na URL.");
+    }
+});
+
 
 async function buscarClientePorCpf(cpf) {
     try {
@@ -22,6 +35,7 @@ async function buscarClientePorCpf(cpf) {
 }
 
 function preencherInfoCliente(cliente) {
+    clienteGlobal = cliente;
     document.getElementById("nomeCliente").textContent = cliente.nome;
     document.getElementById("cpfCliente").textContent = cliente.cpf;
     document.getElementById("emailCliente").textContent = cliente.email || "Não informado";
@@ -29,12 +43,13 @@ function preencherInfoCliente(cliente) {
     const contatosBody = document.getElementById("tabelaContatos");
     contatosBody.innerHTML = `
         <tr>
-            <td>${cliente.telefone || "Sem telefone"}</td>
+            <td>${cliente.numero || "Sem telefone"}</td>
             <td>${cliente.email || "Sem email"}</td>
-            <td><button onclick="editarContato()">Editar</button></td>
+            <td><button class="btn-editar" onclick="editarContato()">✏️ Editar</button></td>
         </tr>
     `;
 }
+
 
 async function buscarContratos(clienteId) {
     try {
@@ -54,25 +69,92 @@ function preencherContratos(contratos) {
     tbody.innerHTML = "";
 
     contratos.forEach((contrato, index) => {
+        const vencimentoDate = new Date(contrato.vencimento);
+        const vencimentoFormatado = vencimentoDate.toLocaleDateString("pt-BR");
+
+        const hoje = new Date();
+        const diasAtraso = Math.max(0, Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24)));
+
         const linha = document.createElement("tr");
         linha.innerHTML = `
             <td>${index + 1}</td>
-            <td>${contrato.vencimento}</td>
-            <td>${Number(contrato.valor_total).toFixed(2)}</td>
-            <td>${contrato.atraso || 0}</td>
+            <td>${vencimentoFormatado}</td>
+            <td>R$ ${Number(contrato.valor_total).toFixed(2)}</td>
+            <td>${diasAtraso} dia(s)</td>
             <td><span class="status-icon ativo"></span></td>
-            <td>
-                ${contrato.observacao || "-"}
-                <br>
-                <button onclick="abrirCalculadoraComContrato('${contrato.numero_contrato}')">Simular</button>
-            </td>
+            <td>${contrato.numero_contrato}</td>
         `;
         tbody.appendChild(linha);
     });
 }
 
 
+
 function editarContato() {
-    alert("Função de edição de contato ainda não implementada.");
+    if (!clienteGlobal) {
+        alert("Cliente não carregado.");
+        return;
+    }
+    document.getElementById("editarNumero").value = clienteGlobal.telefone || "";
+    document.getElementById("editarEmail").value = clienteGlobal.email || "";
+
+    document.getElementById("popupEditarContato").style.display = "flex";
+}
+function fecharPopupEditar() {
+    document.getElementById("popupEditarContato").style.display = "none";
+}
+async function salvarContatoEditado() {
+    const novoNumero = document.getElementById("editarNumero").value.trim();
+    const novoEmail = document.getElementById("editarEmail").value.trim();
+
+    if (!clienteGlobal || !clienteGlobal.id) {
+        alert("Cliente invalido.");
+        return;
+    }
+    try {
+        const resposta = await fetch(`http://127.0.0.1:5000/clientes/${clienteGlobal.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ numero: novoNumero, email: novoEmail })
+        });
+        if (!resposta.ok) {
+            alert("Erro ao atualizar cliente.");
+            return;
+        }
+        const clienteAtualizado = await resposta.json();
+        clienteGlobal = clienteAtualizado;
+
+        preencherInfoCliente(clienteAtualizado);
+        fecharPopupEditar();
+        alert("Contato atualizado com sucesso.");
+    } catch (erro) {
+        console.error("Erro ao salvar contato:", erro);
+        alert("Erro ao salvar contato.");
+    }
+}
+
+async function verificarAcordoAtivo(numeroContrato) {
+    try {
+        const resposta = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+        if (!resposta.ok) return;
+
+        const acordo = await resposta.json();
+        if (acordo && acordo.status === "em andamento") {
+            if (acordo.parcelamento_json) {
+                try {
+                    acordo.parcelamento = JSON.parse(acordo.parcelamento_json);
+                } catch (e) {
+                    console.warn("Erro ao interpretar parcelamento_json:", e);
+                }
+            }
+
+            renderizarResumoAcordo(acordo);
+
+            const btnCalc = document.getElementById("AbrirCalculadora");
+            if (btnCalc) btnCalc.style.display = "none";
+        }
+    } catch (e) {
+        console.error("Erro ao verificar acordo ativo:", e);
+    }
 }
 

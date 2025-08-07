@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Negociação | CobAle</title>
   <link rel="stylesheet" href="../css/negociacao.css">
-  <script src="../javascript/calculadora.js"></script>
-  <script src="../javascript/negociacao.js"></script>
 </head>
 <body>
 <header>
@@ -37,6 +35,20 @@
         <tbody id="tabelaContatos"></tbody>
       </table>
     </section>
+  <div id="popupEditarContato" class="popup-editar" style="display: none;">
+    <div class="popup-content">
+      <h3>Editar Contato</h3>
+      
+      <label for="editarNumero">Telefone:</label><br>
+      <input type="text" id="editarNumero" placeholder="Digite o telefone"><br><br>
+      
+      <label for="editarEmail">Email:</label><br>
+      <input type="email" id="editarEmail" placeholder="Digite o email"><br><br>
+      
+      <button onclick="salvarContatoEditado()">Salvar</button>
+      <button onclick="fecharPopupEditar()" class="btn-cancelar">Cancelar</button>
+    </div>
+  </div>    
 
     <section>
       <h2>Contratos</h2>
@@ -48,7 +60,7 @@
             <th>Valor</th>
             <th>Atraso</th>
             <th>Status</th>
-            <th>Observação</th>
+            <th>Nº Contrato</th>
           </tr>
         </thead>
         <tbody id="tabelaContratos"></tbody>
@@ -63,59 +75,79 @@
 
       <button id="AbrirCalculadora">Abrir Calculadora</button>
 
-      <!-- Popup da Calculadora -->
-      <div id="popupCalculadora" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; border:2px solid black; padding:20px; z-index:1000; width:800px;">
-        <div style="display:flex; justify-content:space-between; align-items: center;">
-          <div>
-            <label><strong>Data de vencimento do acordo</strong></label><br>
-            <input type="date" id="dataVencimento">
-          </div>
-          <button onclick="fecharCalculadora()" style="height:30px;" title="Fechar popup">Fechar</button>
+      <div id="popupCalculadora" class="popup-calculadora">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <label><strong>Data de vencimento do acordo</strong></label><br>
+          <input type="date" id="dataVencimento">
+        </div>
+        <button onclick="fecharCalculadora()" class="fechar-btn">Fechar</button>
+      </div>
+
+      <hr>
+
+      <div class="calculadora-layout">
+        <div class="coluna-esquerda">
+          <label><strong>Entrada (R$)</strong></label>
+          <input type="number" id="valorEntrada" placeholder="0,00">
+
+          <label><strong>Parcelas</strong></label>
+          <input type="number" id="numeroParcelas" min="1" max="24" value="1">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Parcela</th>
+                <th>Vencimento</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaParcelas">
+            </tbody>
+          </table>
         </div>
 
-        <hr style="margin:15px 0;">
+        <div class="coluna-direita">
+          <label><strong>Dias em atraso</strong></label>
+          <input type="text" id="campoDiasAtraso" readonly>
 
-        <div style="display:flex; gap:20px;">
-          <!-- Coluna Esquerda -->
-          <div style="flex:1;">
-            <label><strong>Entrada (R$)</strong></label><br>
-            <input type="number" id="valorEntrada" placeholder="0,00"><br><br>
+          <label><strong>Valor total da dívida</strong></label>
+          <input type="text" id="campoValorComJuros" readonly>
 
-            <label><strong>Parcelas</strong></label><br>
-            <input type="number" id="numeroParcelas" min="2" max="24" value="2"><br><br>
+          <label><strong>Desconto total</strong></label>
+          <input type="text" id="campoDesconto" readonly>
 
-            <table border="1" style="width:100%; text-align:center;">
-              <thead>
-                <tr>
-                  <th>Parcela</th>
-                  <th>Vencimento</th>
-                  <th>Valor</th>
-                </tr>
-              </thead>
-              <tbody id="tabelaParcelas">
-                <!-- Gerado via JS -->
-              </tbody>
-            </table>
-          </div>
+          <label><strong>Juros total</strong></label>
+          <input type="text" id="campoJuros" readonly>
 
-          <!-- Coluna Direita -->
-          <div style="flex:0.7;">
-            <label><strong>Desconto total</strong></label><br>
-            <input type="text" id="campoDesconto" readonly><br><br>
+          <label><strong>Valor final</strong></label>
+          <input type="text" id="campoValorFinal" readonly>
 
-            <label><strong>Juros total</strong></label><br>
-            <input type="text" id="campoJuros" readonly><br><br>
-
-            <label><strong>Valor final</strong></label><br>
-            <input type="text" id="campoValorFinal" readonly><br><br>
-            
-            <button id="btnAtualizarCalculo" style="margin-bottom: 10px;">Atualizar Cálculo</button>
-            <button onclick="formalizarAcordo()">Formalizar</button>
+          <div style="text-align: right; margin-top: 20px;">
+            <button id="btnSalvarEdicao" style="display: none;" onclick="salvarAcordoEditado()">Salvar Alterações</button>
+            <button id="btnFormalizar" onclick="formalizarAcordo()">Formalizar Acordo</button>
           </div>
         </div>
       </div>
+    </div>
+    <div id="popupEditarAcordo" class="popup" style="display: none;">
+      <div class="popup-conteudo">
+        <h3>Editar Acordo</h3>
+        <label for="editarQtdParcelas">Quantidade de parcelas:</label>
+        <input type="number" id="editarQtdParcelas" min="1" />
 
-      <!-- Resultado do Acordo -->
+        <label for="editarValorEntrada">Valor de entrada (R$):</label>
+        <input type="number" id="editarValorEntrada" step="0.01" />
+
+        <label for="editarVencimento">Vencimento:</label>
+        <input type="date" id="editarVencimento" />
+
+        <div class="popup-botoes">
+          <button id="btnSalvarEdicao">Salvar</button>
+          <button onclick="fecharPopupEditarAcordo()">Cancelar</button>
+        </div>
+      </div>
+    </div>
       <div id="resultadoAcordo"></div>
     </section>
   </div>
@@ -124,9 +156,8 @@
 <footer>
   <p>&copy; 2025 CobAle. Todos os direitos reservados.</p>
 </footer>
-
-
-
+  <script src="../javascript/calculadora.js"></script>
+  <script src="../javascript/negociacao.js"></script>
 
 </body>
 </html>

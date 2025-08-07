@@ -114,5 +114,190 @@ th, td {
   cursor: pointer;
 }
 
+.popup-calculadora {
+  display: none;
+  position: fixed;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  max-width: 95%;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  z-index: 1000;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-        
+.popup-calculadora h2 {
+  margin-top: 0;
+}
+
+.popup-calculadora input[type="text"],
+.popup-calculadora input[type="number"],
+.popup-calculadora input[type="date"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.popup-calculadora button {
+  padding: 10px 20px;
+  background-color: #0a84ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.popup-calculadora button:hover {
+  background-color: #006ad9;
+}
+
+.popup-calculadora .fechar-btn {
+  background-color: #ccc;
+  color: black;
+  font-weight: normal;
+}
+
+.popup-calculadora .fechar-btn:hover {
+  background-color: #999;
+}
+
+.popup-calculadora .calculadora-layout {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.popup-calculadora .coluna-esquerda,
+.popup-calculadora .coluna-direita {
+  flex: 1;
+}
+
+.popup-calculadora table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.popup-calculadora table th,
+.popup-calculadora table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.popup-calculadora table th {
+  background-color: #f5f5f5;
+}
+
+#AbrirCalculadora {
+  padding: 10px 20px;
+  background-color: #0a84ff; /* azul forte */
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#AbrirCalculadora:hover {
+  background-color: #006ad9;
+  transform: translateY(-1px);
+}
+
+#AbrirCalculadora:active {
+  transform: scale(0.98);
+  box-shadow: none;
+}
+.btn-editar {
+  padding: 8px 16px;
+  background-color: #ffa500;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-editar:hover {
+  background-color: #e59400;
+  transform: translateY(-1px);
+}
+
+.btn-editar:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.popup-editar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.popup-editar .popup-content {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.popup-editar input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.popup-editar button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  margin: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup-editar button:first-of-type {
+  background-color: #0a84ff;
+  color: white;
+}
+
+.popup-editar .btn-cancelar {
+  background-color: #ccc;
+}
+.acordo-box {
+    border: 2px solid #0071c5;
+    background: #f3f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 16px;
+}
