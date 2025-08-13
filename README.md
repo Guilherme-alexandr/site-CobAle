@@ -19,10 +19,10 @@ O **CobAle** é um sistema web desenvolvido para auxiliar na gestão de contrato
 ## 🖥️ Telas do Sistema
 
 ### 🔍 Página de Pesquisa
-![Página de Pesquisa](<pagina de pesquisa.png>)
+![Página de Pesquisa](<pagina de contrato.png>)
 
 ### 📄 Página de Contrato
-![Página de Contrato](<pagina de contrato.png>)
+![Página de Contrato](<pagina de pesquisa.png>)
 
 ### 💰 Cálculo à Vista
 ![Cálculo à Vista](<calculo ex. avista.png>)
@@ -70,5 +70,6 @@ O **CobAle** é um sistema web desenvolvido para auxiliar na gestão de contrato
 ---
 
 ## 👨‍💻 Autor
-Desenvolvido por **Guilherme Alexandre** e equipe.
+Desenvolvido por **Guilherme Alexandre**
+[Linkedin](https://www.linkedin.com/in/guilherme-alexandre002/)
 
