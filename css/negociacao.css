@@ -2,7 +2,6 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-
 header {
     background-color: #005fa3;
     color: white;
@@ -15,6 +14,10 @@ header {
 header h1 {
     margin: 0;
     font-size: 1.8em;
+}
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 main {
