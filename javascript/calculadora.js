@@ -12,6 +12,90 @@ function fecharCalculadora() {
     document.getElementById("popupCalculadora").style.display = "none";
 }
 
+async function simularCalculo() {
+    if (!contratoGlobal) return;
+
+    const dataVencimentoInput = document.getElementById("dataVencimento");
+    const parcelasInput = document.getElementById("numeroParcelas");
+    const entradaInput = document.getElementById("valorEntrada");
+    const campoJuros = document.getElementById("campoJuros");
+    const campoDesconto = document.getElementById("campoDesconto");
+    const campoValorFinal = document.getElementById("campoValorFinal");
+    const tabelaParcelas = document.getElementById("tabelaParcelas");
+    const campoDiasAtraso = document.getElementById("campoDiasAtraso");
+    const campoValorComJuros = document.getElementById("campoValorComJuros");
+
+    const dataSelecionada = new Date(dataVencimentoInput.value);
+    const dataContrato = new Date(contratoGlobal.vencimento);
+    if (isNaN(dataSelecionada.getTime())) {
+        alert("Data de vencimento inválida.");
+        return;
+    }
+
+    const diasAtraso = Math.max(0, Math.floor((dataSelecionada - dataContrato) / (1000 * 60 * 60 * 24)));
+
+    const valorEntrada = parseFloat(entradaInput.value) || 0;
+    let quantidadeParcelas = parseInt(parcelasInput.value) || 0;
+
+    let tipo_pagamento = (valorEntrada > 0 || quantidadeParcelas > 1) ? "parcelado" : "avista";
+
+    if (tipo_pagamento === "parcelado" && quantidadeParcelas < 2) quantidadeParcelas = 2;
+    if (quantidadeParcelas > 24) quantidadeParcelas = 24;
+
+    const payload = {
+        valor_original: parseFloat(contratoGlobal.valor_total) || 0,
+        dias_em_atraso: diasAtraso,
+        tipo_pagamento: tipo_pagamento
+    };
+
+    if (tipo_pagamento === "parcelado") {
+        payload.quantidade_parcelas = quantidadeParcelas;
+        if (valorEntrada > 0) {
+            payload.valor_entrada = valorEntrada;
+        }
+    }
+
+    console.log("Enviando para simulação:", payload);
+
+    try {
+        const resposta = await fetch("http://127.0.0.1:5000/acordos/simular", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resposta.ok) {
+            let erroMsg = "Erro na simulação";
+            try {
+                const erro = await resposta.json();
+                erroMsg = erro.erro || erroMsg;
+            } catch {}
+            throw new Error(erroMsg);
+        }
+
+        const dados = await resposta.json();
+
+        campoDiasAtraso.value = `${dados.dias_em_atraso} dia(s)`;
+        campoValorComJuros.value = `R$ ${(dados.valor_final + dados.juros_total - dados.valor_desconto).toFixed(2)}`;
+        campoJuros.value = `R$ ${dados.juros_total.toFixed(2)}`;
+        campoDesconto.value = `${dados.percentual_desconto}% (R$ ${dados.valor_desconto.toFixed(2)})`;
+        campoValorFinal.value = `R$ ${dados.valor_final.toFixed(2)}`;
+
+        if (tipo_pagamento === "parcelado" && dados.parcelamento) {
+            preencherTabelaParcelas(dados.parcelamento);
+        } else {
+            limparTabelaParcelas();
+        }
+
+    } catch (e) {
+        console.error("Erro ao simular cálculo:", e);
+        alert(`Erro na simulação: ${e.message}`);
+    }
+}
+
+
+
+
 async function inicializarCalculadoraComContrato(contrato) {
     contratoGlobal = contrato;
     clienteIdGlobal = contrato.cliente_id;
@@ -27,13 +111,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dataVencimentoInput = document.getElementById("dataVencimento");
     const parcelasInput = document.getElementById("numeroParcelas");
     const entradaInput = document.getElementById("valorEntrada");
-    const campoJuros = document.getElementById("campoJuros");
-    const campoDesconto = document.getElementById("campoDesconto");
-    const campoValorFinal = document.getElementById("campoValorFinal");
-    const tabelaParcelas = document.getElementById("tabelaParcelas");
-    const campoDiasAtraso = document.getElementById("campoDiasAtraso");
-    const campoValorComJuros = document.getElementById("campoValorComJuros");
-
 
     const params = new URLSearchParams(window.location.search);
     const numeroContrato = params.get("contrato");
@@ -51,8 +128,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Erro ao buscar contrato pela URL:", e);
             alert("Contrato inválido na URL.");
         }
-    } else {
-        console.warn("Número do contrato não encontrado na URL.");
     }
 
     if (btn) {
@@ -65,102 +140,45 @@ document.addEventListener("DOMContentLoaded", async () => {
             abrirCalculadora();
             await inicializarCalculadoraComContrato(contratoGlobal);
         });
-    } else {
-        console.warn("Botão 'AbrirCalculadora' não encontrado.");
     }
 
-    dataVencimentoInput.addEventListener("change", simularCalculo);
-    parcelasInput.addEventListener("input", simularCalculo);
-    entradaInput.addEventListener("input", simularCalculo);
-
-    async function simularCalculo() {
-        if (!contratoGlobal) return;
-
-        const dataSelecionada = new Date(dataVencimentoInput.value);
-        const dataContrato = new Date(contratoGlobal.vencimento);
-
-        if (isNaN(dataSelecionada.getTime())) {
-            alert("Data de vencimento inválida.");
-            return;
-        }
-
-        const diasAtraso = Math.max(0, Math.floor((dataSelecionada - dataContrato) / (1000 * 60 * 60 * 24)));
-        const valorEntrada = entradaInput.value ? parseFloat(entradaInput.value) : null;
-        const quantidadeParcelas = parseInt(parcelasInput.value) || 0;
-        const tipo_pagamento = (valorEntrada || quantidadeParcelas > 1) ? "parcelado" : "avista";
-
-        const payload = {
-            valor_original: contratoGlobal.valor_total,
-            dias_em_atraso: diasAtraso,
-            tipo_pagamento,
-            quantidade_parcelas: quantidadeParcelas,
-            valor_entrada: valorEntrada
-        };
-
-        try {
-            const resposta = await fetch("http://127.0.0.1:5000/acordos/simular", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            if (!resposta.ok) {
-                const erro = await resposta.json();
-                throw new Error(erro.erro || "Erro na simulação");
-            }
-
-            const dados = await resposta.json();
-
-            campoDiasAtraso.value = `${dados.dias_em_atraso} dia(s)`;
-            campoValorComJuros.value = `R$ ${(dados.valor_original + dados.juros_total).toFixed(2)}`;
-            campoJuros.value = `R$ ${dados.juros_total.toFixed(2)}`;
-            campoDesconto.value = `${dados.percentual_desconto}% (R$ ${dados.valor_desconto.toFixed(2)})`;
-            campoValorFinal.value = `R$ ${dados.valor_final.toFixed(2)}`;
-
-            if (tipo_pagamento === "parcelado" && dados.parcelamento) {
-                preencherTabelaParcelas(dados.parcelamento);
-            } else {
-                limparTabelaParcelas();
-            }
-
-        } catch (e) {
-            console.error("Erro ao simular cálculo:", e);
-            alert(`Erro na simulação: ${e.message}`);
-        }
-    }
-
-    function preencherTabelaParcelas(parcelamento) {
-        limparTabelaParcelas();
-
-        const { quantidade_parcelas, valor_parcela, entrada } = parcelamento;
-        const dataBase = new Date(dataVencimentoInput.value);
-
-        for (let i = 0; i < quantidade_parcelas; i++) {
-            const vencimento = new Date(dataBase);
-            vencimento.setMonth(vencimento.getMonth() + i);
-
-            const linha = tabelaParcelas.insertRow();
-            linha.innerHTML = `
-                <td>${i + 1}</td>
-                <td>${vencimento.toLocaleDateString()}</td>
-                <td>R$ ${valor_parcela.toFixed(2)}</td>
-            `;
-        }
-
-        if (entrada > 0) {
-            const entradaRow = tabelaParcelas.insertRow(0);
-            entradaRow.innerHTML = `
-                <td>Entrada</td>
-                <td>${new Date().toLocaleDateString()}</td>
-                <td>R$ ${entrada.toFixed(2)}</td>
-            `;
-        }
-    }
-
-    function limparTabelaParcelas() {
-        tabelaParcelas.innerHTML = "";
-    }
+    if (dataVencimentoInput) dataVencimentoInput.addEventListener("change", simularCalculo);
+    if (parcelasInput) parcelasInput.addEventListener("input", simularCalculo);
+    if (entradaInput) entradaInput.addEventListener("input", simularCalculo);
 });
+
+function preencherTabelaParcelas(parcelamento) {
+    const tabelaParcelas = document.getElementById("tabelaParcelas");
+    limparTabelaParcelas();
+
+    const { quantidade_parcelas, valor_parcela, entrada } = parcelamento;
+    const dataBase = new Date(document.getElementById("dataVencimento").value);
+
+    for (let i = 0; i < quantidade_parcelas; i++) {
+        const vencimento = new Date(dataBase);
+        vencimento.setMonth(vencimento.getMonth() + i);
+
+        const linha = tabelaParcelas.insertRow();
+        linha.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${vencimento.toLocaleDateString()}</td>
+            <td>R$ ${valor_parcela.toFixed(2)}</td>
+        `;
+    }
+
+    if (entrada > 0) {
+        const entradaRow = tabelaParcelas.insertRow(0);
+        entradaRow.innerHTML = `
+            <td>Entrada</td>
+            <td>${new Date().toLocaleDateString()}</td>
+            <td>R$ ${entrada.toFixed(2)}</td>
+        `;
+    }
+}
+
+function limparTabelaParcelas() {
+    document.getElementById("tabelaParcelas").innerHTML = "";
+}
 
 async function formalizarAcordo() {
     if (!contratoGlobal) return;
@@ -177,6 +195,7 @@ async function formalizarAcordo() {
         valor_entrada: entrada,
         vencimento: vencimento,
     };
+
     try {
         const resposta = await fetch("http://127.0.0.1:5000/acordos/", {
             method: "POST",
@@ -225,7 +244,6 @@ function renderizarResumoAcordo(acordo) {
             ${parcelasHtml}
         </div>
         `;
-
 }
 
 function gerarTabelaParcelas(parcelamento) {
@@ -280,86 +298,82 @@ function toggleMenuAcoes() {
 }
 
 async function editarAcordo() {
-  toggleMenuAcoes();
+    toggleMenuAcoes();
 
-  try {
-    const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
-    const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+    try {
+        const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
+        const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
 
-    if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
+        if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
 
-    const acordo = await respostaAcordo.json();
-    window.acordoGlobal = acordo;
+        const acordo = await respostaAcordo.json();
+        window.acordoGlobal = acordo;
 
-    document.getElementById("numeroParcelas").value = acordo.qtd_parcelas || 1;
-    document.getElementById("valorEntrada").value = acordo.valor_entrada || 0;
-    document.getElementById("btnFormalizar").style.display = "none";
-    document.getElementById("btnSalvarEdicao").style.display = "inline-block";
+        document.getElementById("numeroParcelas").value = acordo.qtd_parcelas || 1;
+        document.getElementById("valorEntrada").value = acordo.valor_entrada || 0;
+        document.getElementById("btnFormalizar").style.display = "none";
+        document.getElementById("btnSalvarEdicao").style.display = "inline-block";
 
-    document.getElementById("popupCalculadora").style.display = "block";
+        document.getElementById("popupCalculadora").style.display = "block";
 
-  } catch (erro) {
-    console.error("Erro ao carregar acordo para edição:", erro);
-    alert("Erro ao carregar acordo para edição.");
-  }
+    } catch (erro) {
+        console.error("Erro ao carregar acordo para edição:", erro);
+        alert("Erro ao carregar acordo para edição.");
+    }
 }
-
-
 
 function fecharPopupEditarAcordo() {
     document.getElementById("popupEditarAcordo").style.display = "none";
 }
+
 async function salvarAcordoEditado() {
-  try {
-    const resposta = await fetch(`http://127.0.0.1:5000/acordos/${window.acordoGlobal.id}`, {
-      method: "DELETE"
-    });
+    try {
+        const resposta = await fetch(`http://127.0.0.1:5000/acordos/${window.acordoGlobal.id}`, {
+            method: "DELETE"
+        });
 
-    if (!resposta.ok) throw new Error("Erro ao remover acordo antigo.");
+        if (!resposta.ok) throw new Error("Erro ao remover acordo antigo.");
 
-    await formalizarAcordo();
+        await formalizarAcordo();
 
-    alert("Acordo atualizado com sucesso.");
-    
-    document.getElementById("btnSalvarEdicao").style.display = "none";
-    document.getElementById("btnFormalizar").style.display = "inline-block";
+        alert("Acordo atualizado com sucesso.");
+        
+        document.getElementById("btnSalvarEdicao").style.display = "none";
+        document.getElementById("btnFormalizar").style.display = "inline-block";
 
-  } catch (e) {
-    console.error("Erro ao atualizar acordo:", e);
-    alert("Erro ao atualizar acordo.");
-  }
+    } catch (e) {
+        console.error("Erro ao atualizar acordo:", e);
+        alert("Erro ao atualizar acordo.");
+    }
 }
 
-
-
-
 async function deletarAcordo() {
-  toggleMenuAcoes();
+    toggleMenuAcoes();
 
-  const confirmacao = confirm("Tem certeza que deseja excluir este acordo?");
-  if (!confirmacao) return;
+    const confirmacao = confirm("Tem certeza que deseja excluir este acordo?");
+    if (!confirmacao) return;
 
-  try {
-    const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
-    const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
-    if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
+    try {
+        const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
+        const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+        if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
 
-    const acordo = await respostaAcordo.json();
+        const acordo = await respostaAcordo.json();
 
-    const resposta = await fetch(`http://127.0.0.1:5000/acordos/${acordo.id}`, {
-      method: "DELETE",
-    });
+        const resposta = await fetch(`http://127.0.0.1:5000/acordos/${acordo.id}`, {
+            method: "DELETE",
+        });
 
-    if (!resposta.ok) throw new Error("Erro ao excluir acordo.");
+        if (!resposta.ok) throw new Error("Erro ao excluir acordo.");
 
-    alert("Acordo excluído com sucesso.");
-    document.getElementById("resultadoAcordo").innerHTML = "";
+        alert("Acordo excluído com sucesso.");
+        document.getElementById("resultadoAcordo").innerHTML = "";
 
-    const btnCalc = document.getElementById("AbrirCalculadora");
-    if (btnCalc) btnCalc.style.display = "inline-block";
+        const btnCalc = document.getElementById("AbrirCalculadora");
+        if (btnCalc) btnCalc.style.display = "inline-block";
 
-  } catch (erro) {
-    console.error("Erro ao excluir acordo:", erro);
-    alert("Erro ao excluir o acordo.");
-  }
+    } catch (erro) {
+        console.error("Erro ao excluir acordo:", erro);
+        alert("Erro ao excluir o acordo.");
+    }
 }
