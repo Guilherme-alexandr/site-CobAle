@@ -1,6 +1,5 @@
 let clienteGlobal = null;
 
-
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const cpf = params.get("cpf");
@@ -19,11 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
 async function buscarClientePorCpf(cpf) {
     try {
-        const url = `http://127.0.0.1:5000/clientes/buscar_por_cpf/${cpf}`;
-        const response = await fetch(url);
+        const response = await fetch(`${API_BASE}/clientes/buscar_por_cpf/${cpf}`);
         if (!response.ok) throw new Error("Erro ao buscar cliente.");
         const cliente = await response.json();
         preencherInfoCliente(cliente);
@@ -53,8 +50,8 @@ function preencherInfoCliente(cliente) {
 
 async function buscarContratos(clienteId) {
     try {
-        const url = `http://127.0.0.1:5000/contratos/buscar_por_cliente/${clienteId}`;
-        const response = await fetch(url);
+        const response = await fetch(`${API_BASE}/contratos/buscar_por_cliente/${clienteId}`);
+
         if (!response.ok) throw new Error("Erro ao buscar contratos.");
         const contratos = await response.json();
         preencherContratos(contratos);
@@ -79,7 +76,7 @@ function preencherContratos(contratos) {
         linha.innerHTML = `
             <td>${index + 1}</td>
             <td>${vencimentoFormatado}</td>
-            <td>R$ ${Number(contrato.valor_total).toFixed(2)}</td>
+            <td>R$ ${Number(contrato.valor_total).toFixed(2).replace('.', ',')}</td>
             <td>${diasAtraso} dia(s)</td>
             <td><span class="status-icon ativo"></span></td>
             <td>${contrato.numero_contrato}</td>
@@ -112,7 +109,7 @@ async function salvarContatoEditado() {
         return;
     }
     try {
-        const resposta = await fetch(`http://127.0.0.1:5000/clientes/${clienteGlobal.id}`, {
+        const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ numero: novoNumero, email: novoEmail })
@@ -135,7 +132,7 @@ async function salvarContatoEditado() {
 
 async function verificarAcordoAtivo(numeroContrato) {
     try {
-        const resposta = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+        const resposta = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`);
         if (!resposta.ok) return;
 
         const acordo = await resposta.json();

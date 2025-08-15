@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f6fa;
+    color: #1e3a5f;
 }
+
 header {
     background-color: #005fa3;
     color: white;
@@ -9,67 +14,25 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
 header h1 {
     margin: 0;
-    font-size: 1.8em;
+    font-size: 1.8rem;
+    flex: 1;
+    text-align: center;
 }
+
 .logo {
-    font-size: 1.5em;
+    font-size: 2.2rem;
     font-weight: bold;
-}
-
-main {
-    display: flex;
-    padding: 20px;
-}
-
-.coluna-esquerda {
-    width: 65%;
-    padding-right: 20px;
-    border-right: 1px solid #ccc;
-}
-
-.coluna-direita {
-    width: 35%;
-    padding-left: 20px;
-}
-
-section {
-    margin-bottom: 30px;
-}
-
-h2 {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    color: #005fa3;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-}
-
-.status-icon {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.status-icon.ativo {
-    background-color: red;
+    flex-shrink: 0;
 }
 
 .botao-voltar {
@@ -80,222 +43,221 @@ th, td {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    transition: 0.3s;
+    flex-shrink: 0;
 }
 
 .botao-voltar:hover {
     background-color: #f0f0f0;
 }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+main {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
 }
 
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 700px;
-  max-width: 90%;
+.coluna-esquerda {
+    flex: 2;
+    min-width: 300px;
 }
 
-.hidden {
-  display: none;
+.coluna-direita {
+    flex: 1;
+    min-width: 280px;
 }
 
-.close-btn {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #005fa3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background-color: #fff;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #005fa3;
+    color: white;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.popup, .popup-editar, .popup-calculadora {
+    font-family: 'Inter', sans-serif;
+}
+
+.popup, .popup-editar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content, .popup-editar .popup-content {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.popup-editar input,
+.popup-calculadora input[type="text"], 
+.popup-calculadora input[type="number"], 
+.popup-calculadora input[type="date"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
 .popup-calculadora {
-  display: none;
-  position: fixed;
-  top: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  max-width: 95%;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  padding: 24px;
-  z-index: 1000;
-  font-family: 'Segoe UI', sans-serif;
+    display: none;
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    padding: 24px;
+    z-index: 1000;
 }
 
-.popup-calculadora h2 {
-  margin-top: 0;
-}
-
-.popup-calculadora input[type="text"],
-.popup-calculadora input[type="number"],
-.popup-calculadora input[type="date"] {
-  width: 100%;
-  padding: 8px 10px;
-  margin-top: 4px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.popup-calculadora button {
-  padding: 10px 20px;
-  background-color: #0a84ff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.popup-calculadora button:hover {
-  background-color: #006ad9;
-}
-
-.popup-calculadora .fechar-btn {
-  background-color: #ccc;
-  color: black;
-  font-weight: normal;
-}
-
-.popup-calculadora .fechar-btn:hover {
-  background-color: #999;
+.popup-calculadora .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .popup-calculadora .calculadora-layout {
-  display: flex;
-  gap: 24px;
-  margin-top: 16px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .popup-calculadora .coluna-esquerda,
 .popup-calculadora .coluna-direita {
-  flex: 1;
+    flex: 1;
+    min-width: 250px;
 }
 
-.popup-calculadora table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
+.popup-calculadora .campo-popup {
+    margin-bottom: 12px;
 }
 
-.popup-calculadora table th,
-.popup-calculadora table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  font-size: 14px;
+button {
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+}
+.abrir-calculadora {
+    background-color: #0a84ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
-.popup-calculadora table th {
-  background-color: #f5f5f5;
+.abrir-calculadora:hover {
+    background-color: #006ad9;
+    transform: translateY(-1px);
 }
 
-#AbrirCalculadora {
-  padding: 10px 20px;
-  background-color: #0a84ff;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#AbrirCalculadora:hover {
-  background-color: #006ad9;
-  transform: translateY(-1px);
-}
-
-#AbrirCalculadora:active {
-  transform: scale(0.98);
-  box-shadow: none;
-}
-.btn-editar {
-  padding: 8px 16px;
-  background-color: #ffa500;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-editar:hover {
-  background-color: #e59400;
-  transform: translateY(-1px);
-}
-
-.btn-editar:active {
-  transform: scale(0.97);
-  box-shadow: none;
-}
-
-.popup-editar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.popup-editar .popup-content {
-  background-color: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 300px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-.popup-editar input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.abrir-calculadora:active {
+    transform: scale(0.98);
 }
 
 .popup-editar button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  margin: 6px;
-  cursor: pointer;
-  font-weight: bold;
+    margin-right: 10px;
 }
 
-.popup-editar button:first-of-type {
-  background-color: #0a84ff;
-  color: white;
+.popup-editar button:nth-child(1) {
+    background-color: #0a84ff;
+    color: white;
+}
+
+.popup-editar button:nth-child(1):hover {
+    background-color: #006ad9;
 }
 
 .popup-editar .btn-cancelar {
-  background-color: #ccc;
+    background-color: #ccc;
+    color: black;
 }
+
+.popup-editar .btn-cancelar:hover {
+    background-color: #999;
+}
+
+.popup-calculadora #btnFormalizar {
+    background-color: #0a84ff;
+    color: white;
+    margin-left: 10px;
+}
+
+.popup-calculadora #btnFormalizar:hover {
+    background-color: #006ad9;
+}
+
+.popup-calculadora .fechar-btn {
+    background-color: #ccc;
+    color: black;
+}
+
+.popup-calculadora .fechar-btn:hover {
+    background-color: #999;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+}
+
 .acordo-box {
     border: 2px solid #0071c5;
     background: #f3f8ff;
@@ -304,3 +266,104 @@ th, td {
     margin-top: 20px;
     font-size: 16px;
 }
+
+@media (max-width: 1024px) {
+    main {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .coluna-esquerda, .coluna-direita {
+        width: 100%;
+        padding: 0;
+        border: none;
+    }
+
+    .popup-calculadora .calculadora-layout {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    table th, table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    #AbrirCalculadora {
+        width: 100%;
+    }
+
+    .popup-editar button, .popup-calculadora button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .popup-content, .popup-editar .popup-content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        padding: 10px 15px;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+        flex: 1 1 100%;
+        margin-bottom: 8px;
+    }
+
+    .botao-voltar {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+    }
+
+    .botao-voltar {
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+
+    table th, table td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .popup-content, .popup-editar .popup-content {
+        padding: 16px;
+    }
+
+    #AbrirCalculadora {
+        width: 100%;
+    }
+
+    .popup-editar button, .popup-calculadora button {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    .popup-calculadora .calculadora-layout {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+

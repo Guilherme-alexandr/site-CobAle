@@ -11,10 +11,19 @@
     <h2>Consulta de Contratos - CobAle</h2>
 
     <div class="filtros">
-        <label for="cpf">Buscar por CPF:
+        <label for="nome">Nome:
+            <input type="text" id="nome" placeholder="Ex: João Silva"/>
+        </label>
+
+        <label for="cpf">CPF:
             <input type="text" id="cpf" placeholder="Ex: 12345678901"/>
         </label>
-        <button onclick="buscarPorCpf()">Buscar</button>
+
+        <label for="numeroContrato">Nº Contrato:
+            <input type="text" id="numeroContrato" placeholder="Ex: 123456"/>
+        </label>
+
+        <button onclick="buscar()">Buscar</button>
     </div>
 
     <table id="resultado">
@@ -24,6 +33,7 @@
                 <th>CPF</th>
                 <th>Nº Contrato</th>
                 <th>Valor Total</th>
+                <th>Acordo</th>
                 <th>Ações</th>
             </tr>
         </thead>

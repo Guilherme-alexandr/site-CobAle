@@ -19,16 +19,16 @@ O **CobAle** é um sistema web desenvolvido para auxiliar na gestão de contrato
 ## 🖥️ Telas do Sistema
 
 ### 🔍 Página de Pesquisa
-![Página de Pesquisa](<pagina de contrato.png>)
+![Página de Pesquisa](<img/pagina de pesquisa.png>)
 
 ### 📄 Página de Contrato
-![Página de Contrato](<pagina de pesquisa.png>)
+![Página de Contrato](<img/pagina de contrato.png>)
 
 ### 💰 Cálculo à Vista
-![Cálculo à Vista](<calculo ex. avista.png>)
+![Cálculo à Vista](<img/calculo ex. avista.png>)
 
 ### 💳 Cálculo Parcelado
-![Cálculo Parcelado](<calculo ex. parcelado.png>)
+![Cálculo Parcelado](<img/calculo ex. parcelado.png>)
 
 ---
 
@@ -65,7 +65,7 @@ O **CobAle** é um sistema web desenvolvido para auxiliar na gestão de contrato
 ---
 
 ## 🖼️ Logo
-![Logo CobAle](<logo CobAle.png>)
+![Logo CobAle](<img/logo CobAle.png>)
 
 ---
 

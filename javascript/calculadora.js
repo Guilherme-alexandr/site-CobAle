@@ -58,7 +58,7 @@ async function simularCalculo() {
     console.log("Enviando para simulação:", payload);
 
     try {
-        const resposta = await fetch("http://127.0.0.1:5000/acordos/simular", {
+        const resposta = await fetch(`${API_BASE}/acordos/simular`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (numeroContrato) {
         try {
-            const resposta = await fetch(`http://127.0.0.1:5000/contratos/${numeroContrato}`);
+            const resposta = await fetch(`${API_BASE}/contratos/${numeroContrato}`);
             if (!resposta.ok) throw new Error("Contrato não encontrado.");
 
             const contrato = await resposta.json();
@@ -197,7 +197,7 @@ async function formalizarAcordo() {
     };
 
     try {
-        const resposta = await fetch("http://127.0.0.1:5000/acordos/", {
+        const resposta = await fetch(`${API_BASE}/acordos/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -302,7 +302,7 @@ async function editarAcordo() {
 
     try {
         const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
-        const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+        const respostaAcordo = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`);
 
         if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
 
@@ -328,7 +328,7 @@ function fecharPopupEditarAcordo() {
 
 async function salvarAcordoEditado() {
     try {
-        const resposta = await fetch(`http://127.0.0.1:5000/acordos/${window.acordoGlobal.id}`, {
+        const resposta = await fetch(`${API_BASE}/acordos/${window.acordoGlobal.id}`, {
             method: "DELETE"
         });
 
@@ -355,12 +355,12 @@ async function deletarAcordo() {
 
     try {
         const numeroContrato = new URLSearchParams(window.location.search).get("contrato");
-        const respostaAcordo = await fetch(`http://127.0.0.1:5000/acordos/buscar_por_contrato/${numeroContrato}`);
+        const respostaAcordo = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`);
         if (!respostaAcordo.ok) throw new Error("Acordo não encontrado.");
 
         const acordo = await respostaAcordo.json();
 
-        const resposta = await fetch(`http://127.0.0.1:5000/acordos/${acordo.id}`, {
+        const resposta = await fetch(`${API_BASE}/acordos/${acordo.id}`, {
             method: "DELETE",
         });
 
