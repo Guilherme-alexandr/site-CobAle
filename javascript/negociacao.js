@@ -70,18 +70,20 @@ async function buscarContratos(clienteId) {
 
         if (!response.ok) throw new Error("Erro ao buscar contratos.");
         const contratos = await response.json();
-        preencherContratos(contratos);
+        await preencherContratos(contratos); // AGORA É async
     } catch (error) {
         console.error(error);
         alert("Erro ao buscar contratos do cliente.");
     }
 }
 
-function preencherContratos(contratos) {
+async function preencherContratos(contratos) {
     const tbody = document.getElementById("tabelaContratos");
     tbody.innerHTML = "";
 
-    contratos.forEach((contrato, index) => {
+    for (let index = 0; index < contratos.length; index++) {
+        const contrato = contratos[index];
+
         const vencimentoDate = new Date(contrato.vencimento);
         const vencimentoFormatado = vencimentoDate.toLocaleDateString("pt-BR");
 
@@ -91,20 +93,41 @@ function preencherContratos(contratos) {
             Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24))
         );
 
+        // Definir status visual (padrão: em aberto = vermelho)
+        let statusClasse = "status-vermelho";
+        let statusTitle = "Em aberto";
+
+        try {
+            const respAcordo = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${contrato.numero_contrato}`);
+            if (respAcordo.ok) {
+                const acordo = await respAcordo.json();
+                if (acordo && acordo.status) {
+                    if (acordo.status.toLowerCase() === "em andamento") {
+                        statusClasse = "status-amarelo";
+                        statusTitle = "Em andamento";
+                    } else if (acordo.status.toLowerCase() === "finalizado") {
+                        statusClasse = "status-verde";
+                        statusTitle = "Finalizado";
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn("Erro ao verificar acordo:", e);
+        }
+
         const linha = document.createElement("tr");
         linha.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${vencimentoFormatado}</td>
-      <td>R$ ${Number(contrato.valor_total)
-                .toFixed(2)
-                .replace(".", ",")}</td>
-      <td>${diasAtraso} dia(s)</td>
-      <td><span class="status-icon ativo"></span></td>
-      <td>${contrato.numero_contrato}</td>
-    `;
+            <td>${index + 1}</td>
+            <td>${vencimentoFormatado}</td>
+            <td>R$ ${Number(contrato.valor_total).toFixed(2).replace(".", ",")}</td>
+            <td>${diasAtraso} dia(s)</td>
+            <td><span class="status-icon ${statusClasse}" title="${statusTitle}"></span></td>
+            <td>${contrato.numero_contrato}</td>
+        `;
         tbody.appendChild(linha);
-    });
+    }
 }
+
 
 // ===== EDITAR CONTATO =====
 function editarContato() {
