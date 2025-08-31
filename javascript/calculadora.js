@@ -76,7 +76,7 @@ async function simularCalculo() {
         const dados = await resposta.json();
 
         campoDiasAtraso.value = `${dados.dias_em_atraso} dia(s)`;
-        campoValorComJuros.value = `R$ ${(dados.valor_final + dados.juros_total - dados.valor_desconto).toFixed(2)}`;
+        campoValorComJuros.value = `R$ ${(dados.valor_original + dados.juros_total).toFixed(2)}`;
         campoJuros.value = `R$ ${dados.juros_total.toFixed(2)}`;
         campoDesconto.value = `${dados.percentual_desconto}% (R$ ${dados.valor_desconto.toFixed(2)})`;
         campoValorFinal.value = `R$ ${dados.valor_final.toFixed(2)}`;
