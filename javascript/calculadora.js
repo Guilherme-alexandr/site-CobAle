@@ -76,7 +76,7 @@ async function simularCalculo() {
         const dados = await resposta.json();
 
         campoDiasAtraso.value = `${dados.dias_em_atraso} dia(s)`;
-        campoValorComJuros.value = `R$ ${(dados.valor_final + dados.juros_total - dados.valor_desconto).toFixed(2)}`;
+        campoValorComJuros.value = `R$ ${(dados.valor_original + dados.juros_total).toFixed(2)}`;
         campoJuros.value = `R$ ${dados.juros_total.toFixed(2)}`;
         campoDesconto.value = `${dados.percentual_desconto}% (R$ ${dados.valor_desconto.toFixed(2)})`;
         campoValorFinal.value = `R$ ${dados.valor_final.toFixed(2)}`;
@@ -233,6 +233,8 @@ function renderizarResumoAcordo(acordo) {
                 <div id="menuAcoesAcordo" class="menu-acoes" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">
                 <button onclick="editarAcordo()">📝 Editar</button>
                 <button onclick="deletarAcordo()">🗑️ Excluir</button>
+                <button onclick="gerarBoleto(${acordo.id})">💳 Gerar Boleto</button>
+                <button onclick="enviarBoleto(${acordo.id}, ${acordo.boleto_id})">📨 Enviar Boleto</button>
                 </div>
             </div>
             </div>
@@ -375,5 +377,59 @@ async function deletarAcordo() {
     } catch (erro) {
         console.error("Erro ao excluir acordo:", erro);
         alert("Erro ao excluir o acordo.");
+    }
+}
+
+async function gerarBoleto(acordoId) {
+    try {
+        const response = await fetch(`${API_BASE}/acordos/gerar_boleto/${acordoId}`, {
+            method: "GET"
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao gerar boleto");
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        window.open(url, "_blank");
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível gerar o boleto.");
+    }
+}
+
+async function enviarBoleto(acordoId) {
+    console.log("acordoId:", acordoId);
+
+    if (!acordoId) {
+        alert("Erro: acordo_id não foi informado!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}acordos/enviar_boleto/${acordoId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            const text = await response.text();
+            throw new Error(`Resposta inesperada do servidor: ${text.substring(0, 100)}...`);
+        }
+
+        if (!response.ok) {
+            throw new Error(data.erro || "Erro ao enviar boleto.");
+        }
+
+        alert(data.mensagem || "Boleto enviado com sucesso!");
+
+    } catch (error) {
+        console.error("Erro ao enviar boleto:", error);
+        alert(error.message || "Não foi possível enviar o boleto.");
     }
 }

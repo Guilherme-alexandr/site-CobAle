@@ -1,4 +1,4 @@
-const API_BASE = "https://cob-ale.onrender.com";
+const API_BASE = "https://cob-ale.onrender.com/";
 
 async function buscar() {
     const cpf = document.getElementById('cpf').value.trim();
