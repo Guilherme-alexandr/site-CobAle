@@ -400,20 +400,18 @@ async function gerarBoleto(acordoId) {
     }
 }
 
-async function enviarBoleto(acordoId, boletoId) {
-    if (!boletoId) {
-        alert("Erro: boleto_id não foi informado!");
+async function enviarBoleto(acordoId) {
+    console.log("acordoId:", acordoId);
+
+    if (!acordoId) {
+        alert("Erro: acordo_id não foi informado!");
         return;
     }
 
     try {
-        const response = await fetch(`${API_BASE}/acordos/enviar_boleto`, {
+        const response = await fetch(`${API_BASE}acordos/enviar_boleto/${acordoId}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                acordo_id: acordoId,
-                boleto_id: boletoId
-            })
+            headers: { "Content-Type": "application/json" }
         });
 
         let data;
@@ -435,5 +433,3 @@ async function enviarBoleto(acordoId, boletoId) {
         alert(error.message || "Não foi possível enviar o boleto.");
     }
 }
-
-
