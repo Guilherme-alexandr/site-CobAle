@@ -12,8 +12,10 @@ O **CobAle** é um sistema web desenvolvido para auxiliar na gestão de contrato
 - 🧮 **Simulação de Acordos**:
   - Cálculo à vista com desconto.
   - Cálculo parcelado.
-- 💾 **Registro de Acordos**: Salve os acordos no sistema.
-
+- 💾 **Registro de Acordos**: 
+   - Salve os acordos no sistema.
+   - Gere o boleto do acordo.
+   - Envie o boleto diretamente no email do cliente.
 ---
 
 ## 🖥️ Telas do Sistema
