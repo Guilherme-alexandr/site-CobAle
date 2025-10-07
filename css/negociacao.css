@@ -5,6 +5,7 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: #f5f6fa;
     color: #1e3a5f;
+    box-sizing: border-box;
 }
 
 header {
@@ -45,6 +46,10 @@ header h1 {
     font-weight: bold;
     transition: 0.3s;
     flex-shrink: 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .botao-voltar:hover {
@@ -71,26 +76,26 @@ main {
 section {
     margin-bottom: 30px;
 }
+
 .status-icon {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin: auto;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: auto;
 }
 
 .status-vermelho {
-  background-color: red;
+    background-color: red;
 }
 
 .status-amarelo {
-  background-color: orange;
+    background-color: orange;
 }
 
 .status-verde {
-  background-color: green;
+    background-color: green;
 }
-
 
 h2 {
     margin-bottom: 10px;
@@ -106,22 +111,35 @@ table {
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     background-color: #fff;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: block;
 }
 
 th, td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    min-width: 80px;
 }
 
 th {
     background-color: #005fa3;
     color: white;
     font-weight: 600;
+    position: sticky;
+    left: 0;
+    z-index: 1;
 }
 
 tr:hover {
     background-color: #f1f1f1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    tr:hover {
+        background-color: transparent;
+    }
 }
 
 .popup, .popup-editar, .popup-calculadora {
@@ -148,6 +166,9 @@ tr:hover {
     width: 90%;
     max-width: 700px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .popup-editar input,
@@ -162,6 +183,7 @@ tr:hover {
     border-radius: 6px;
     font-size: 14px;
     box-sizing: border-box;
+    min-height: 44px;
 }
 
 .popup-calculadora {
@@ -177,6 +199,8 @@ tr:hover {
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     padding: 24px;
     z-index: 1000;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .popup-calculadora .popup-header {
@@ -184,6 +208,7 @@ tr:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .popup-calculadora .calculadora-layout {
@@ -210,7 +235,11 @@ button {
     padding: 8px 16px;
     font-size: 14px;
     border: none;
+    min-height: 44px;
+    box-sizing: border-box;
+    width: auto;
 }
+
 .abrir-calculadora {
     background-color: #0a84ff;
     color: white;
@@ -222,6 +251,7 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 10px;
+    min-height: 44px;
 }
 
 .abrir-calculadora:hover {
@@ -298,6 +328,7 @@ input[readonly] {
         width: 100%;
         padding: 0;
         border: none;
+        min-width: auto;
     }
 
     .popup-calculadora .calculadora-layout {
@@ -330,11 +361,13 @@ input[readonly] {
         justify-content: center;
         text-align: center;
         padding: 10px 15px;
+        gap: 10px;
     }
 
     .logo {
         font-size: 1.8rem;
         margin-bottom: 8px;
+        flex: 1 1 100%;
     }
 
     header h1 {
@@ -346,10 +379,25 @@ input[readonly] {
     .botao-voltar {
         font-size: 14px;
         padding: 5px 10px;
+        flex: 1 1 auto;
+        max-width: 120px;
+    }
+
+    main {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 480px) {
+    header {
+        padding: 8px 10px;
+    }
+
     header h1 {
         font-size: 1.3rem;
     }
@@ -361,6 +409,13 @@ input[readonly] {
     .botao-voltar {
         font-size: 13px;
         padding: 4px 8px;
+        width: 100%;
+        max-width: none;
+    }
+
+    main {
+        padding: 8px;
+        gap: 8px;
     }
 
     table th, table td {
@@ -368,22 +423,92 @@ input[readonly] {
         font-size: 12px;
     }
 
-    .popup-content, .popup-editar .popup-content {
+    .popup-content, .popup-editar .popup-content,
+    .popup-calculadora {
+        width: 95%;
         padding: 16px;
+        margin: 0 2.5%;
+    }
+
+    .popup-calculadora .popup-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .popup-calculadora .fechar-btn {
+        width: 100%;
+        order: 2;
     }
 
     #AbrirCalculadora {
         width: 100%;
+        padding: 12px;
     }
 
     .popup-editar button, .popup-calculadora button {
         width: 100%;
         margin-bottom: 6px;
+        padding: 12px;
     }
 
     .popup-calculadora .calculadora-layout {
         flex-direction: column;
         gap: 12px;
     }
+
+    .popup-calculadora .coluna-esquerda,
+    .popup-calculadora .coluna-direita {
+        min-width: auto;
+    }
+
+    input, button {
+        font-size: 16px;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
 }
 
+@media (max-width: 360px) {
+    header {
+        padding: 6px 8px;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    .botao-voltar {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    main {
+        padding: 5px;
+        gap: 5px;
+    }
+
+    table th, table td {
+        padding: 4px;
+        font-size: 11px;
+        min-width: 60px;
+    }
+
+    .popup-content, .popup-editar .popup-content,
+    .popup-calculadora {
+        width: 98%;
+        padding: 12px;
+        margin: 0 1%;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
