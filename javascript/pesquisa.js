@@ -1,5 +1,5 @@
-const API_BASE = "https://cob-ale.onrender.com/";
-//const API_BASE = "http://127.0.0.1:5000/";
+//const API_BASE = "https://cob-ale.onrender.com/";
+const API_BASE = "http://127.0.0.1:5000/";
 
 async function buscar() {
     const cpf = document.getElementById('cpf').value.trim();
@@ -90,3 +90,25 @@ async function buscar() {
         alert("Erro ao buscar os dados. Verifique o console.");
     }
 }
+const toggleBtn = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        toggleBtn.textContent = '☀️';
+    } else if (currentTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        toggleBtn.textContent = '🌙';
+    } else {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark-mode');
+            toggleBtn.textContent = '☀️';
+        }
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        toggleBtn.textContent = isDark ? '☀️' : '🌙';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });

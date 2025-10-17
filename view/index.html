@@ -8,39 +8,53 @@
 </head>
 <body>
 
-    <h2>Consulta de Contratos - CobAle</h2>
+    <header>
+        <h1>CobAle</h1>
+        <p>Consulta de Contratos</p>
+        <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+    </header>
 
-    <div class="filtros">
-        <label for="nome">Nome:
-            <input type="text" id="nome" placeholder="Ex: João Silva"/>
-        </label>
+    <main class="container">
+        <section class="filtros">
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva"/>
+            </div>
 
-        <label for="cpf">CPF:
-            <input type="text" id="cpf" placeholder="Ex: 12345678901"/>
-        </label>
+            <div class="campo">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" placeholder="Ex: 12345678901"/>
+            </div>
 
-        <label for="numeroContrato">Nº Contrato:
-            <input type="text" id="numeroContrato" placeholder="Ex: 123456"/>
-        </label>
+            <div class="campo">
+                <label for="numeroContrato">Nº Contrato</label>
+                <input type="text" id="numeroContrato" placeholder="Ex: 123456"/>
+            </div>
 
-        <button onclick="buscar()">Buscar</button>
-    </div>
+            <button onclick="buscar()">Buscar</button>
+        </section>
 
-    <table id="resultado">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Nº Contrato</th>
-                <th>Valor Total</th>
-                <th>Acordo</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <section class="tabela-container">
+            <table id="resultado">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Nº Contrato</th>
+                        <th>Valor Total</th>
+                        <th>Acordo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 CobAle — Sistema de Gestão de Contratos</p>
+    </footer>
 
     <script src="../javascript/pesquisa.js"></script>
-
 </body>
 </html>

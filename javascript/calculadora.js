@@ -381,6 +381,48 @@ async function deletarAcordo() {
 }
 
 async function gerarBoleto(acordoId) {
+    let overlay = document.getElementById("loadingBoleto");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "loadingBoleto";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.background = "rgba(0,0,0,0.5)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+        overlay.innerHTML = `
+            <div style="text-align:center; color:#fff;">
+                <div class="spinner" style="
+                    border: 8px solid #f3f3f3; 
+                    border-top: 8px solid #3498db; 
+                    border-radius: 50%; 
+                    width: 60px; 
+                    height: 60px; 
+                    animation: spin 1s linear infinite;
+                    margin-bottom: 15px;
+                "></div>
+                <div style="font-size: 1.2rem;">Gerando boleto, aguarde...</div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    overlay.style.display = "flex";
+
     try {
         const response = await fetch(`${API_BASE}/acordos/gerar_boleto/${acordoId}`, {
             method: "GET"
@@ -394,11 +436,15 @@ async function gerarBoleto(acordoId) {
         const url = URL.createObjectURL(blob);
 
         window.open(url, "_blank");
+
     } catch (error) {
         console.error("Erro:", error);
         alert("Não foi possível gerar o boleto.");
+    } finally {
+        overlay.style.display = "none";
     }
 }
+
 
 async function enviarBoleto(acordoId) {
     console.log("acordoId:", acordoId);
