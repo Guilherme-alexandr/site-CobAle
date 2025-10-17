@@ -1,62 +1,92 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-body {
+/* ===== Reset & Base ===== */
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: 'Inter', sans-serif;
     background-color: #f5f6fa;
     color: #1e3a5f;
-    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Cabeçalho ===== */
 header {
-    background-color: #005fa3;
+    background: linear-gradient(135deg, #1e3a5f, #274b8a);
     color: white;
-    padding: 15px 30px;
+    padding: 1.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 100;
-    transition: background-color 0.3s ease, padding 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
 }
-
-header h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    flex: 1;
-    text-align: center;
-}
-
 .logo {
-    font-size: 2.2rem;
-    font-weight: bold;
-    flex-shrink: 0;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
+/* ===== Botões do Cabeçalho ===== */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ===== Botão Voltar ===== */
 .botao-voltar {
     background-color: white;
-    border: 1px solid white;
-    color: #005fa3;
-    padding: 5px 15px;
-    border-radius: 5px;
+    color: #1e3a5f;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-    flex-shrink: 0;
-    min-height: 44px;
+    transition: all 0.3s ease;
+}
+.botao-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+    transform: translateY(-1px);
+}
+
+/* ===== Botão Tema ===== */
+#theme-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3rem;
+    width: 2.3rem;
+    height: 2.3rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+}
+#theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
 }
 
-.botao-voltar:hover {
-    background-color: #f0f0f0;
-}
-
+/* ===== Layout Principal ===== */
 main {
+    flex: 1;
     display: flex;
     gap: 20px;
     padding: 20px;
@@ -73,37 +103,8 @@ main {
     min-width: 280px;
 }
 
-section {
-    margin-bottom: 30px;
-}
-
-.status-icon {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    margin: auto;
-}
-
-.status-vermelho {
-    background-color: red;
-}
-
-.status-amarelo {
-    background-color: orange;
-}
-
-.status-verde {
-    background-color: green;
-}
-
-h2 {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    color: #005fa3;
-}
-
-table {
+/* ===== Tabelas ===== */
+table, .tabela-acordo {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
@@ -111,9 +112,9 @@ table {
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     background-color: #fff;
-    overflow-x: auto;
+    display: table;
+    table-layout: auto;
     white-space: nowrap;
-    display: block;
 }
 
 th, td {
@@ -136,42 +137,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-@media (hover: none) and (pointer: coarse) {
-    tr:hover {
-        background-color: transparent;
-    }
-}
-
-.tabela-acordo {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    background-color: #fff;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: block;
-}
-
-.tabela-acordo th, .tabela-acordo td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    min-width: 70px;
-    font-size: 13px;
-}
-
-.tabela-acordo th {
-    background-color: #005fa3;
-    color: white;
-    font-weight: 600;
-    position: sticky;
-    left: 0;
-    z-index: 1;
-}
-
+/* ===== Acordo Box ===== */
 .acordo-box {
     border: 2px solid #0071c5;
     background: #f3f8ff;
@@ -179,137 +145,116 @@ tr:hover {
     border-radius: 10px;
     margin-top: 20px;
     font-size: 16px;
-    box-sizing: border-box;
 }
 
-.acoes-wrapper {
-    position: relative;
-    display: inline-block;
+/* ===== Botões Gerais ===== */
+button {
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    transition: all 0.3s ease;
+    min-height: 44px;
 }
 
-.btn-acoes {
+.btn-acoes, .abrir-calculadora {
     background-color: #0a84ff;
     color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.btn-acoes:hover {
+.btn-acoes:hover, .abrir-calculadora:hover {
     background-color: #006ad9;
+    transform: translateY(-1px);
 }
 
-.menu-acoes {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    z-index: 10;
-    min-width: 150px;
-    flex-direction: column;
-}
-
-.menu-acoes button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-    font-size: 14px;
-    border-bottom: 1px solid #eee;
-    min-height: 44px;
-    box-sizing: border-box;
-}
-
-.menu-acoes button:hover {
-    background-color: #f0f0f0;
-}
-
-.menu-acoes button:last-child {
-    border-bottom: none;
-}
-
+/* ===== Popups ===== */
 .popup, .popup-editar, .popup-calculadora {
-    font-family: 'Inter', sans-serif;
-}
-
-.popup, .popup-editar {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: rgba(0,0,0,0.4);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 10px;
+    width: 100%;
 }
 
-.popup-content, .popup-editar .popup-content {
-    background: white;
-    padding: 24px;
+.popup-content, .popup-editar .popup-content, .popup-calculadora {
+    background-color: #ffffff;
     border-radius: 12px;
     width: 90%;
-    max-width: 700px;
+    max-width: 800px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    box-sizing: border-box;
-    max-height: 90vh;
+    padding: 24px;
+    max-height: 85vh;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
-.popup-editar input,
-.popup-calculadora input[type="text"], 
-.popup-calculadora input[type="number"], 
-.popup-calculadora input[type="date"] {
+/* Campos dentro do popup */
+.campo-popup {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-popup label {
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #1e3a5f;
+}
+
+.campo-popup input, .campo-popup select {
     width: 100%;
     padding: 8px 10px;
-    margin-top: 4px;
-    margin-bottom: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
     box-sizing: border-box;
-    min-height: 44px;
 }
 
-.popup-calculadora {
-    display: none;
-    position: fixed;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 800px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    padding: 24px;
-    z-index: 1000;
-    max-height: 90vh;
-    overflow-y: auto;
+input[readonly] {
+    background-color: #ffffff;
 }
 
-.popup-calculadora .popup-header {
+/* Botões dentro dos popups */
+.botoes-popup {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    justify-content: flex-end;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
+.botoes-popup button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+}
+.botoes-popup .btn-salvar, #btnFormalizar {
+    background-color: #0a84ff;
+    color: white;
+}
+.botoes-popup .btn-salvar:hover, #btnFormalizar:hover {
+    background-color: #006ad9;
+}
+.botoes-popup .btn-cancelar, .fechar-btn {
+    background-color: #ccc;
+    color: black;
+}
+.botoes-popup .btn-cancelar:hover, .fechar-btn:hover {
+    background-color: #999;
+}
+
+/* Layout calculadora */
 .popup-calculadora .calculadora-layout {
     display: flex;
     gap: 20px;
@@ -322,138 +267,107 @@ tr:hover {
     min-width: 250px;
 }
 
-.popup-calculadora .campo-popup {
-    margin-bottom: 12px;
-}
-
-button {
-    transition: all 0.3s ease;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    min-height: 44px;
-    box-sizing: border-box;
-    width: auto;
-}
-
-.abrir-calculadora {
-    background-color: #0a84ff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.popup-calculadora table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 10px;
-    min-height: 44px;
 }
 
-.abrir-calculadora:hover {
-    background-color: #006ad9;
-    transform: translateY(-1px);
+.popup-calculadora th, .popup-calculadora td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
-.abrir-calculadora:active {
-    transform: scale(0.98);
+.popup-calculadora th {
+    background-color: #005fa3;
+    color: white;
+}
+/* ===== Resumo do Acordo ===== */
+.acordo-box {
+    border: 2px solid #0071c5;
+    background: #f3f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    max-width: 100%;
+    overflow-x: auto;
 }
 
-.popup-editar button {
-    margin-right: 10px;
+/* Menu de ações dentro do resumo */
+.acordo-box .acoes-wrapper {
+    position: relative;
 }
 
-.popup-editar button:nth-child(1) {
+.acordo-box .menu-acoes {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 10;
+    min-width: 180px;
+    flex-direction: column;
+}
+
+.acordo-box .menu-acoes button {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 8px 12px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.acordo-box .menu-acoes button:hover {
     background-color: #0a84ff;
     color: white;
 }
 
-.popup-editar button:nth-child(1):hover {
-    background-color: #006ad9;
+/* Tabela de parcelas dentro do resumo */
+.acordo-box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
-.popup-editar .btn-cancelar {
-    background-color: #ccc;
-    color: black;
+.acordo-box th, .acordo-box td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-.popup-editar .btn-cancelar:hover {
-    background-color: #999;
-}
-
-.popup-calculadora #btnFormalizar {
-    background-color: #0a84ff;
+.acordo-box th {
+    background-color: #005fa3;
     color: white;
-    margin-left: 10px;
 }
 
-.popup-calculadora #btnFormalizar:hover {
-    background-color: #006ad9;
+
+/* ===== Footer ===== */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f2f5;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
 }
 
-.popup-calculadora .fechar-btn {
-    background-color: #ccc;
-    color: black;
-}
-
-.popup-calculadora .fechar-btn:hover {
-    background-color: #999;
-}
-
-input[readonly] {
-    background-color: #f0f0f0;
-}
-
+/* ===== Responsividade ===== */
 @media (max-width: 1024px) {
-    main {
-        flex-direction: column;
-        padding: 10px;
-        gap: 15px;
-    }
-
-    .coluna-esquerda, .coluna-direita {
-        width: 100%;
-        padding: 0;
-        border: none;
-        min-width: auto;
-    }
-
-    .popup-calculadora .calculadora-layout {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    table th, table td {
-        padding: 8px;
-        font-size: 13px;
-    }
-
-    .tabela-acordo th, .tabela-acordo td {
-        padding: 6px;
-        font-size: 12px;
-    }
-
-    #AbrirCalculadora {
-        width: 100%;
-    }
-
-    .popup-editar button, .popup-calculadora button {
-        width: 100%;
-        margin-bottom: 8px;
-    }
-
-    .popup-content, .popup-editar .popup-content {
-        padding: 20px;
-    }
-
-    .menu-acoes {
-        right: auto;
-        left: 0;
-        min-width: 200px;
-    }
+    main { flex-direction: column; padding: 10px; gap: 15px; }
+    .coluna-esquerda, .coluna-direita { width: 100%; }
 }
 
 @media (max-width: 768px) {
@@ -461,108 +375,173 @@ input[readonly] {
         flex-wrap: wrap;
         justify-content: center;
         text-align: center;
-        padding: 10px 15px;
-        gap: 10px;
-    }
-
-    .logo {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-        flex: 1 1 100%;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-        flex: 1 1 100%;
-        margin-bottom: 8px;
-    }
-
-    .botao-voltar {
-        font-size: 14px;
-        padding: 5px 10px;
-        flex: 1 1 auto;
-        max-width: 120px;
-    }
-
-    main {
         padding: 10px;
-        gap: 10px;
     }
-
-    h2 {
-        font-size: 1.1rem;
-    }
-
-    .acordo-box {
-        padding: 15px;
-        font-size: 14px;
-    }
-
-    .acoes-wrapper {
-        width: 100%;
-    }
-
-    .menu-acoes {
-        position: static;
-        display: none;
-        width: 100%;
-        margin-top: 10px;
-        box-shadow: none;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .menu-acoes button {
-        width: 100%;
-        margin: 0;
-        border-bottom: 1px solid #ddd;
-    }
+    .logo { font-size: 1.8rem; flex: 1 1 100%; }
+    header h1 { font-size: 1.4rem; flex: 1 1 100%; }
 }
 
 @media (max-width: 480px) {
-    header {
-        padding: 8px 10px;
-    }
-
-    header h1 {
-        font-size: 1.3rem;
-    }
-
-    .logo {
-        font-size: 1.6rem;
-    }
-
-    .botao-voltar {
-        font-size: 13px;
-        padding: 4px 8px;
-        width: 100%;
-        max-width: none;
-    }
-
-    main {
-        padding: 8px;
-        gap: 8px;
-    }
-
-    table th, table td {
-        padding: 6px;
-        font-size: 12px;
-    }
-
-    .tabela-acordo th, .tabela-acordo td {
-        padding: 5px;
-        font-size: 11px;
-        min-width: 60px;
-    }
-
-    .popup-content, .popup-editar .popup-content,
-    .popup-calculadora {
-        width: 95%;
-        padding: 16px;
-        margin: 0 2.5%;
-    }
-
-    .popup-calculadora .popup-header {
-        flex-direction: column;
-    }
+    #theme-toggle { top: 10px; right: 10px; width: 2.2rem; height: 2.2rem; font-size: 1.2rem; }
 }
+
+
+/* ===== Tema Escuro Unificado (igual página de pesquisa) ===== */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode header {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #f1f1f1;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+}
+
+body.dark-mode .botao-voltar,
+body.dark-mode .abrir-calculadora {
+    background-color: #3b82f6;
+    color: white;
+}
+
+body.dark-mode .botao-voltar:hover,
+body.dark-mode .abrir-calculadora:hover {
+    background-color: #2563eb;
+}
+
+body.dark-mode footer {
+    background-color: #0d1b2a;
+    color: #aaa;
+}
+
+/* ===== Inputs e Campos ===== */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f1f1f1;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #888;
+}
+
+body.dark-mode input[readonly] {
+    background-color: #3b3b3b;
+    color: #f1f1f1;
+}
+
+body.dark-mode input:hover,
+body.dark-mode input:focus,
+body.dark-mode select:hover,
+body.dark-mode select:focus,
+body.dark-mode textarea:hover,
+body.dark-mode textarea:focus {
+    border-color: #10ac84;
+    outline: none;
+}
+
+/* ===== Tabelas ===== */
+body.dark-mode table,
+body.dark-mode .acordo-box table {
+    background-color: #1c1c1c;
+    color: #ddd;
+}
+
+body.dark-mode th {
+    background-color: #0d1b2a;
+    color: #f1f1f1;
+}
+
+body.dark-mode td {
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode tr:hover {
+    background-color: #222;
+}
+
+/* ===== Resumo de Acordo ===== */
+body.dark-mode .acordo-box {
+    background-color: #1c1c1c;
+    border: 2px solid #10ac84;
+    color: #e0e0e0;
+}
+
+body.dark-mode .acordo-box input,
+body.dark-mode .acordo-box select {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f1f1f1;
+}
+
+body.dark-mode .acordo-box input:hover,
+body.dark-mode .acordo-box input:focus,
+body.dark-mode .acordo-box select:hover,
+body.dark-mode .acordo-box select:focus {
+    border-color: #10ac84;
+    outline: none;
+}
+
+body.dark-mode .acordo-box .menu-acoes {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+}
+
+body.dark-mode .acordo-box .menu-acoes button {
+    color: #f1f1f1;
+}
+
+body.dark-mode .acordo-box .menu-acoes button:hover {
+    background-color: #10ac84;
+    color: #fff;
+}
+
+/* ===== Popups ===== */
+body.dark-mode .popup-content,
+body.dark-mode .popup-editar .popup-content,
+body.dark-mode .popup-calculadora {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+}
+
+body.dark-mode .popup-content label,
+body.dark-mode .campo-popup label {
+    color: #f1f1f1;
+}
+
+body.dark-mode .botoes-popup .btn-salvar,
+body.dark-mode #btnFormalizar {
+    background-color: #10ac84;
+    color: white;
+}
+
+body.dark-mode .botoes-popup .btn-salvar:hover,
+body.dark-mode #btnFormalizar:hover {
+    background-color: #0b8b6a;
+}
+
+body.dark-mode .botoes-popup .btn-cancelar,
+body.dark-mode .fechar-btn {
+    background-color: #555;
+    color: #eee;
+}
+
+body.dark-mode .botoes-popup .btn-cancelar:hover,
+body.dark-mode .fechar-btn:hover {
+    background-color: #444;
+}
+
+/* ===== Calculadora ===== */
+body.dark-mode .popup-calculadora th {
+    background-color: #0d1b2a;
+    color: #f1f1f1;
+}
+
+body.dark-mode .popup-calculadora td {
+    border-color: #333;
+}
+

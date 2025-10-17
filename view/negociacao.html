@@ -12,7 +12,11 @@
   <header>
     <div class="logo"><strong>CobAle</strong></div>
     <h1>Negociação de Cliente</h1>
-    <button class="botao-voltar" onclick="window.history.back()">Voltar</button>
+    <div class="header-buttons">
+      <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+      <button class="botao-voltar" onclick="window.history.back()">Voltar</button>
+    </div>
+  </header>
   </header>
 
   <main>
@@ -224,8 +228,8 @@
     <p>&copy; 2025 CobAle. Todos os direitos reservados.</p>
   </footer>
   <script>
-    const API_BASE = "https://cob-ale.onrender.com/";
-    //const API_BASE = "http://127.0.0.1:5000/";
+    //const API_BASE = "https://cob-ale.onrender.com/";
+    const API_BASE = "http://127.0.0.1:5000/";
   </script>
   <script src="../javascript/calculadora.js"></script>
   <script src="../javascript/negociacao.js"></script>

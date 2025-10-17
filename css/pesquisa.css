@@ -1,103 +1,132 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f5f6fa;
+    background-color: #f6f8fc;
+    color: #1e3a5f;
     margin: 0;
-    padding: 2rem;
-    color: #1e3a5f;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Cabeçalho */
-h2 {
-    color: #1e3a5f;
-    margin-bottom: 2rem;
+header {
+    background: linear-gradient(135deg, #1e3a5f, #274b8a);
+    color: white;
     text-align: center;
-    font-weight: 600;
+    padding: 1.8rem 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+header p {
+    margin: 0.3rem 0 0;
+    font-size: 1rem;
+    opacity: 0.9;
 }
 
-/* Container de filtros */
+.container {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
 .filtros {
     background-color: #ffffff;
     padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-    display: flex;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-end;
+    margin-bottom: 2rem;
+    align-items: end;
 }
 
-/* Label e inputs */
-.filtros label {
+.campo {
     display: flex;
     flex-direction: column;
+}
+
+.campo label {
     font-weight: 600;
-    color: #333;
-    min-width: 180px;
-    flex: 1;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
 }
 
-.filtros input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
+.campo input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d0d7de;
     border-radius: 6px;
-    margin-top: 0.3rem;
     font-size: 0.95rem;
+    transition: border-color 0.3s;
 }
 
-/* Botão de busca */
+.campo input:focus {
+    border-color: #1dd1a1;
+    outline: none;
+}
+
 .filtros button {
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1.2rem;
     background-color: #1dd1a1;
     color: white;
     font-weight: 600;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .filtros button:hover {
     background-color: #10ac84;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Tabela */
+.tabela-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    table-layout: fixed;
+    min-width: 600px;
 }
 
 th, td {
     text-align: left;
     padding: 1rem;
     border-bottom: 1px solid #e0e0e0;
-    word-wrap: break-word;
 }
 
 th {
     background-color: #1e3a5f;
     color: white;
     font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f8f9fb;
 }
 
 td:last-child {
     text-align: center;
 }
 
-/* Link de negociação */
 .negociar-link {
     color: #1e90ff;
     font-weight: 500;
@@ -105,29 +134,31 @@ td:last-child {
     text-decoration: underline;
     transition: color 0.2s ease;
 }
-
 .negociar-link:hover {
     color: #0c6ecf;
 }
 
-/* Responsividade */
+footer {
+    background-color: #f0f2f5;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
 @media (max-width: 768px) {
-    body {
-        padding: 1rem;
+    .container {
+        margin: 1rem auto;
+        padding: 0 0.8rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
     }
 
     .filtros {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filtros label {
-        min-width: 100%;
-        flex: none;
-    }
-
-    .filtros button {
-        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
     }
 
     table, thead, tbody, th, td, tr {
@@ -135,22 +166,23 @@ td:last-child {
     }
 
     thead tr {
-        display: none; /* Esconde cabeçalho da tabela em celular */
+        display: none;
     }
 
     tbody tr {
+        background: #fff;
+        border-radius: 10px;
         margin-bottom: 1rem;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         padding: 0.5rem;
     }
 
     tbody td {
         display: flex;
         justify-content: space-between;
-        padding: 0.5rem;
-        border-bottom: none;
+        padding: 0.6rem;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
     }
 
     tbody td::before {
@@ -158,8 +190,100 @@ td:last-child {
         font-weight: 600;
         color: #555;
     }
+}
 
-    td:last-child {
-        justify-content: center;
-    }
+#theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode header {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #f1f1f1;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+}
+
+body.dark-mode .filtros {
+    background-color: #1c1c1c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .campo label {
+    color: #ddd;
+}
+
+body.dark-mode .campo input {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f1f1f1;
+}
+
+body.dark-mode .campo input::placeholder {
+    color: #888;
+}
+
+body.dark-mode .filtros button {
+    background-color: #10ac84;
+    box-shadow: none;
+}
+
+body.dark-mode .filtros button:hover {
+    background-color: #0b8b6a;
+}
+
+body.dark-mode .tabela-container {
+    background-color: #1c1c1c;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
+
+body.dark-mode table {
+    color: #ddd;
+}
+
+body.dark-mode th {
+    background-color: #0d1b2a;
+    color: #f1f1f1;
+}
+
+body.dark-mode tr:hover {
+    background-color: #222;
+}
+
+body.dark-mode td {
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode .negociar-link {
+    color: #4db8ff;
+}
+
+body.dark-mode .negociar-link:hover {
+    color: #81d4fa;
+}
+
+body.dark-mode footer {
+    background-color: #0d1b2a;
+    color: #aaa;
 }
