@@ -90,7 +90,13 @@ async function buscar() {
         alert("Erro ao buscar os dados. Verifique o console.");
     }
 }
-const toggleBtn = document.getElementById('theme-toggle');
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) {
+        console.error('Botão de alternância de tema não encontrado.');
+        return;
+    }
+
     const currentTheme = localStorage.getItem('theme');
 
     if (currentTheme === 'dark') {
@@ -103,6 +109,8 @@ const toggleBtn = document.getElementById('theme-toggle');
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.body.classList.add('dark-mode');
             toggleBtn.textContent = '☀️';
+        } else {
+            toggleBtn.textContent = '🌙';
         }
     }
 
@@ -112,3 +120,4 @@ const toggleBtn = document.getElementById('theme-toggle');
         toggleBtn.textContent = isDark ? '☀️' : '🌙';
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
+});
