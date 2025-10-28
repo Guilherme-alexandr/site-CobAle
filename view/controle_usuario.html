@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle de Usuários - CobAle</title>
+    <link rel="stylesheet" href="../css/controle_usuarios.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Controle de Usuários</h1>
+        <p>Gerencie os usuários do sistema</p>
+
+        <div class="header-actions">
+            <button id="btnCriar" class="header-btn criar">+ Criar Usuário</button>
+            <button id="btnVoltar" class="header-btn voltar">Voltar</button>
+        </div>
+
+        <button id="theme-toggle" aria-label="Alternar tema" title="Alternar tema (Claro/Escuro)">🌙</button>
+    </header>
+
+    <main class="container">
+
+        <!-- FILTROS -->
+        <section class="filtros-usuarios">
+            <div class="campo">
+                <label for="pesquisaNome">Pesquisar por nome:</label>
+                <input type="text" id="pesquisaNome" placeholder="Digite o nome do usuário..." />
+            </div>
+
+            <div class="campo">
+                <label for="filtroCargo">Filtrar por cargo:</label>
+                <select id="filtroCargo">
+                    <option value="">Todos</option>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+            </div>
+
+            <button id="btnLimparFiltros" class="btn-filtro">Limpar Filtros</button>
+        </section>
+
+        <!-- TABELA DE USUÁRIOS -->
+        <section class="tabela-container">
+            <table id="tabelaUsuarios">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Login</th>
+                        <th>Senha</th>
+                        <th>Cargo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados inseridos dinamicamente -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- POPUP DE EDIÇÃO -->
+    <div id="popupEdicao" class="popup hidden">
+        <div class="popup-content">
+            <h2>Editar Usuário</h2>
+            <form id="formEdicao">
+                <label for="editNome">Nome</label>
+                <input type="text" id="editNome" required />
+
+                <label for="editLogin">Login</label>
+                <input type="text" id="editLogin" required />
+
+                <label for="editSenha">Senha</label>
+                <input type="password" id="editSenha" placeholder="Deixe em branco para não alterar" />
+
+                <label for="editCargo">Cargo</label>
+                <select id="editCargo" required>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+
+                <div class="popup-actions">
+                    <button type="submit" class="salvar">Salvar</button>
+                    <button type="button" id="btnExcluir" class="excluir">Excluir</button>
+                    <button type="button" id="btnCancelar" class="cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP DE CRIAÇÃO -->
+    <div id="popupCriar" class="popup hidden">
+        <div class="popup-content">
+            <h2>Novo Usuário</h2>
+            <form id="formCriar">
+                <label for="novoNome">Nome</label>
+                <input type="text" id="novoNome" required />
+
+                <label for="novoLogin">Login</label>
+                <input type="text" id="novoLogin" required />
+
+                <label for="novaSenha">Senha</label>
+                <input type="password" id="novaSenha" required />
+
+                <label for="novoCargo">Cargo</label>
+                <select id="novoCargo" required>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+
+                <div class="popup-actions">
+                    <button type="submit" class="salvar">Criar</button>
+                    <button type="button" id="btnCancelarCriar" class="cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        © 2025 CobAle — Painel Administrativo
+    </footer>
+
+    <script src="../javascript/controle_usuarios.js"></script>
+</body>
+
+</html>

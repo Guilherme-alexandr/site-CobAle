@@ -1,0 +1,437 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f6f8fc;
+    margin: 0;
+    color: #1e3a5f;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+}
+main.container {
+    flex: 1;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: linear-gradient(135deg, #1e3a5f, #274b8a);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.header-actions {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+}
+
+.header-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.header-btn.voltar {
+    background-color: #95a5a6;
+}
+
+.header-btn.criar {
+    background-color: #1dd1a1;
+}
+
+.header-btn:hover {
+    opacity: 0.85;
+}
+
+/* ===== CONTEÚDO ===== */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto;
+}
+
+/* ===== TABELA ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #1e3a5f;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+td {
+    color: #333;
+    text-align: left;
+}
+
+td button {
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+}
+
+.editar {
+    background-color: #3498db;
+}
+
+.editar:hover {
+    background-color: #2c82c9;
+}
+
+/* ===== POPUPS REESTILIZADOS ===== */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.popup:not(.hidden) {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.popup-content {
+    position: relative;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem 2.2rem;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    animation: popupFadeIn 0.3s ease;
+    transform: scale(0.96);
+    transition: transform 0.25s ease;
+}
+
+.popup:not(.hidden) .popup-content {
+    transform: scale(1);
+}
+
+/* ===== BOTÃO FECHAR ===== */
+.fechar-popup {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.fechar-popup:hover {
+    color: #e74c3c;
+}
+
+/* ===== CONTEÚDO DO POPUP ===== */
+.popup-content h2 {
+    text-align: center;
+    font-weight: 700;
+    color: #1e3a5f;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.popup-content label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 0.4rem;
+}
+
+.popup-content input,
+.popup-content select {
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid #cfd9e2;
+    background-color: #f9fbfd;
+    font-size: 1rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.popup-content input:focus,
+.popup-content select:focus {
+    border-color: #1dd1a1;
+    box-shadow: 0 0 0 3px rgba(29, 209, 161, 0.15);
+    outline: none;
+}
+
+/* ===== BOTÕES DO POPUP ===== */
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+}
+
+.popup-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.salvar {
+    background-color: #1dd1a1;
+    color: #fff;
+}
+
+.salvar:hover {
+    background-color: #17b890;
+}
+
+.excluir {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.excluir:hover {
+    background-color: #c0392b;
+}
+
+.cancelar {
+    background-color: #95a5a6;
+    color: #fff;
+}
+
+.cancelar:hover {
+    background-color: #7f8c8d;
+}
+
+/* ===== ANIMAÇÃO POPUP ===== */
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ===== FILTROS ===== */
+.filtros-usuarios {
+    background-color: #ffffff;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.filtros-usuarios .campo {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filtros-usuarios label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #2c3e50;
+}
+
+.filtros-usuarios input,
+.filtros-usuarios select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.filtros-usuarios input:focus,
+.filtros-usuarios select:focus {
+    border-color: #1dd1a1;
+    outline: none;
+}
+
+.btn-filtro {
+    padding: 0.8rem 1.2rem;
+    background-color: #1e3a5f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-filtro:hover {
+    background-color: #274b8a;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== BOTÃO DE TEMA ===== */
+#theme-toggle {
+    position: absolute;
+    top: 5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background-color: #f0f2f5;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+
+}
+
+/* ===== TEMA ESCURO ===== */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode header {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #f1f1f1;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+}
+
+/* Filtros */
+body.dark-mode .filtros-usuarios {
+    background-color: #1c1c1c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .campo label {
+    color: #ddd;
+}
+
+body.dark-mode .campo input,
+body.dark-mode .campo select {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f1f1f1;
+}
+
+body.dark-mode .campo input::placeholder {
+    color: #888;
+}
+
+body.dark-mode .btn-filtro {
+    background-color: #10ac84;
+    box-shadow: none;
+}
+
+body.dark-mode .btn-filtro:hover {
+    background-color: #0b8b6a;
+}
+
+/* Tabela */
+body.dark-mode .tabela-container {
+    background-color: #1c1c1c;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
+
+body.dark-mode table {
+    color: #ddd;
+}
+
+body.dark-mode th {
+    background-color: #0d1b2a;
+    color: #f1f1f1;
+}
+
+body.dark-mode tr:hover {
+    background-color: #0c0c0c2c;
+}
+
+body.dark-mode td {
+    border-bottom: 1px solid #333;
+}
+
+/* Popups */
+body.dark-mode .popup-content {
+    background-color: #1e1e1e;
+    color: #eee;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.7);
+}
+
+body.dark-mode .popup-content input,
+body.dark-mode .popup-content select {
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    color: #fff;
+}
+
+body.dark-mode .popup-content input:focus,
+body.dark-mode .popup-content select:focus {
+    border-color: #10ac84;
+    box-shadow: 0 0 0 3px rgba(16, 172, 132, 0.2);
+}
+
+body.dark-mode .fechar-popup {
+    color: #aaa;
+}
+
+body.dark-mode footer {
+    background-color: #0d1b2a;
+    color: #aaa;
+}

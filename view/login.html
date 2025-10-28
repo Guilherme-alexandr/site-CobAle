@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login CobAle</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/pesquisa.css">
+</head>
+
+<body>
+    <header>
+        <h1>CobAle</h1>
+        <p>Faça login para acessar o sistema</p>
+        <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+    </header>
+
+    <div class="container">
+        <div class="filtros" style="max-width: 400px; margin: 2rem auto; text-align: center;">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="campo">
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" placeholder="Digite seu login">
+                </div>
+                <div class="campo">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" placeholder="Digite sua senha">
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="mensagem" style="margin-top: 1rem; color: red;"></div>
+
+        </div>
+    </div>
+
+    <footer>
+        CobAle © 2025
+    </footer>
+    <script src="../javascript/login.js"></script>
+</body>
+
+</html>

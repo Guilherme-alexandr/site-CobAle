@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f6f8fc;
+    color: #1e3a5f;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background: linear-gradient(135deg, #1e3a5f, #274b8a);
+    color: white;
+    text-align: center;
+    padding: 1.8rem 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.login-container {
+    flex: 1;
+    width: 100%;
+    max-width: 400px;
+    margin: 3rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    color: #1e3a5f;
+}
+
+.login-container .campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.login-container .campo label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+}
+
+.login-container .campo input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.login-container .campo input:focus {
+    border-color: #1dd1a1;
+    outline: none;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #1dd1a1;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #10ac84;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#mensagem {
+    margin-top: 1rem;
+    color: red;
+    font-weight: 500;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin: 2rem 1rem;
+        padding: 1.5rem 1.5rem;
+    }
+}
+
+/* Tema escuro */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode header {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #f1f1f1;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+}
+
+body.dark-mode .login-container {
+    background-color: #1c1c1c;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .login-container .campo label {
+    color: #ddd;
+}
+
+body.dark-mode .login-container .campo input {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f1f1f1;
+}
+
+body.dark-mode .login-container .campo input::placeholder {
+    color: #888;
+}
+
+body.dark-mode .login-container button {
+    background-color: #10ac84;
+}
+
+body.dark-mode .login-container button:hover {
+    background-color: #0b8b6a;
+}
+
+body.dark-mode #mensagem {
+    color: #ff6b6b;
+}
+
+/* Botão de alternar tema */
+#theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode #theme-toggle {
+    color: #ffd369;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}

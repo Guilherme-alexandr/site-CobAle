@@ -1,6 +1,7 @@
-const API_BASE = "https://cob-ale.onrender.com/";
-//const API_BASE = "http://127.0.0.1:5000/";
+//const API_BASE = "https://cob-ale.onrender.com/";
+const API_BASE = "http://127.0.0.1:5000/";
 
+// ===== Função de busca =====
 async function buscar() {
     const cpf = document.getElementById('cpf').value.trim();
     const nome = document.getElementById('nome').value.trim();
@@ -13,63 +14,84 @@ async function buscar() {
 
     try {
         let clientes = [];
+
+        // Buscar por CPF parcial
         if (cpf) {
             const resp = await fetch(`${API_BASE}/clientes/buscar_por_cpf/${cpf}`);
             if (resp.ok) {
-                const cliente = await resp.json();
-                clientes = [cliente];
+                const dados = await resp.json();
+                // Se a API retornar um array ou objeto único, padroniza
+                clientes = Array.isArray(dados) ? dados : [dados];
             }
-        } 
-        else if (numeroContrato) {
+        }
+
+        // Buscar por número de contrato
+        if (numeroContrato) {
             const respContrato = await fetch(`${API_BASE}/contratos/${numeroContrato}`);
             if (respContrato.ok) {
                 const contrato = await respContrato.json();
-
                 const respCliente = await fetch(`${API_BASE}/clientes/${contrato.cliente_id}`);
                 if (respCliente.ok) {
                     const cliente = await respCliente.json();
-                    clientes = [cliente];
-                }
-            }
-        } 
-        else if (nome) {
-            const resp = await fetch(`${API_BASE}/clientes/buscar_por_nome/${nome}`);
-            if (resp.ok) {
-                clientes = await resp.json();
-            }
-        }
-
-        if (!clientes.length) {
-            alert("Nenhum resultado encontrado.");
-            return;
-        }
-
-        const tbody = document.querySelector('#resultado tbody');
-        tbody.innerHTML = '';
-
-        for (const cliente of clientes) {
-            const respContratos = await fetch(`${API_BASE}/contratos/buscar_por_cliente/${cliente.id}`);
-            if (!respContratos.ok) continue;
-
-            const contratos = await respContratos.json();
-
-            for (const contrato of contratos) {
-                let statusAcordo = "Sem acordo";
-                try {
-                    const respAcordo = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${contrato.numero_contrato}`);
-                    if (respAcordo.ok) {
-                        const acordo = await respAcordo.json();
-                        if (acordo && acordo.status) {
-                            statusAcordo = acordo.status;
-                        } else {
-                            statusAcordo = "Possui acordo";
-                        }
+                    if (!clientes.some(c => c.id === cliente.id)) {
+                        clientes.push(cliente);
                     }
-                } catch (e) {
-                    console.warn("Erro ao verificar acordo:", e);
                 }
-                const linha = document.createElement('tr');
-                linha.innerHTML = `
+            }
+        }
+
+        // Buscar por nome parcial
+        if (nome) {
+            const respNome = await fetch(`${API_BASE}/clientes/buscar_por_nome/${nome}`);
+            if (respNome.ok) {
+                let clientesPorNome = await respNome.json();
+
+                // garante que seja sempre um array
+                if (!Array.isArray(clientesPorNome)) {
+                    clientesPorNome = clientesPorNome ? [clientesPorNome] : [];
+                }
+
+                // Adiciona sem duplicar
+                for (const cliente of clientesPorNome) {
+                    if (!clientes.some(c => c.id === cliente.id)) {
+                        clientes.push(cliente);
+                    }
+                }
+            }
+        }
+
+            if (!clientes.length) {
+                alert("Nenhum resultado encontrado.");
+                return;
+            }
+
+            const tbody = document.querySelector('#resultado tbody');
+            tbody.innerHTML = '';
+
+            for (const cliente of clientes) {
+                const respContratos = await fetch(`${API_BASE}/contratos/buscar_por_cliente/${cliente.id}`);
+                if (!respContratos.ok) continue;
+
+                const contratos = await respContratos.json();
+
+                for (const contrato of contratos) {
+                    let statusAcordo = "Sem acordo";
+                    try {
+                        const respAcordo = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${contrato.numero_contrato}`);
+                        if (respAcordo.ok) {
+                            const acordo = await respAcordo.json();
+                            if (acordo && acordo.status) {
+                                statusAcordo = acordo.status;
+                            } else {
+                                statusAcordo = "Possui acordo";
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Erro ao verificar acordo:", e);
+                    }
+
+                    const linha = document.createElement('tr');
+                    linha.innerHTML = `
                     <td>${cliente.nome}</td>
                     <td>${cliente.cpf}</td>
                     <td>${contrato.numero_contrato}</td>
@@ -81,15 +103,17 @@ async function buscar() {
                         </a>
                     </td>
                 `;
-                tbody.appendChild(linha);
+                    tbody.appendChild(linha);
+                }
             }
-        }
 
-    } catch (erro) {
-        console.error("Erro ao buscar:", erro);
-        alert("Erro ao buscar os dados. Verifique o console.");
+        } catch (erro) {
+            console.error("Erro ao buscar:", erro);
+            alert("Erro ao buscar os dados. Verifique o console.");
+        }
     }
-}
+
+// ===== Tema escuro/claro =====
 const toggleBtn = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme');
 
@@ -99,11 +123,9 @@ const toggleBtn = document.getElementById('theme-toggle');
     } else if (currentTheme === 'light') {
         document.body.classList.remove('dark-mode');
         toggleBtn.textContent = '🌙';
-    } else {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-            toggleBtn.textContent = '☀️';
-        }
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+        toggleBtn.textContent = '☀️';
     }
 
     toggleBtn.addEventListener('click', () => {
@@ -111,4 +133,27 @@ const toggleBtn = document.getElementById('theme-toggle');
         const isDark = document.body.classList.contains('dark-mode');
         toggleBtn.textContent = isDark ? '☀️' : '🌙';
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ===== Botões Sair e Controle =====
+    const sairBtn = document.getElementById('sair-btn');
+    const controleBtn = document.getElementById('controle-btn');
+
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario) {
+        window.location.href = "login.html";
+    }
+
+    // Mostrar botão Controle apenas para gerente ou supervisor
+    if (usuario.cargo === 'gerente' || usuario.cargo === 'supervisor') {
+        controleBtn.style.display = 'inline-block';
+    }
+
+    sairBtn.addEventListener('click', () => {
+        localStorage.clear();
+        window.location.href = "login.html";
+    });
+
+    controleBtn.addEventListener('click', () => {
+        window.location.href = "controle_usuario.html";
     });

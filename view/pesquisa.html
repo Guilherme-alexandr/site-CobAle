@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesquisa - CobAle</title>
+    <link rel="stylesheet" href="../css/pesquisa.css" />
+</head>
+
+<body>
+
+    <header>
+        <h1>CobAle</h1>
+        <p>Consulta de Contratos</p>
+        <button id="controle-btn" class="header-btn">Controle</button>
+        <button id="sair-btn" class="header-btn">Sair</button>
+        <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+    </header>
+
+
+    <main class="container">
+        <section class="filtros">
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva" />
+            </div>
+
+            <div class="campo">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" placeholder="Ex: 12345678901" />
+            </div>
+
+            <div class="campo">
+                <label for="numeroContrato">Nº Contrato</label>
+                <input type="text" id="numeroContrato" placeholder="Ex: 123456" />
+            </div>
+
+            <button onclick="buscar()">Buscar</button>
+        </section>
+
+        <section class="tabela-container">
+            <table id="resultado">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Nº Contrato</th>
+                        <th>Valor Total</th>
+                        <th>Acordo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 CobAle — Sistema de Gestão de Contratos</p>
+    </footer>
+
+    <script src="../javascript/pesquisa.js"></script>
+</body>
+
+</html>
