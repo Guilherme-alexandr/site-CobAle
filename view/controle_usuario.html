@@ -15,11 +15,16 @@
 
         <div class="header-actions">
             <button id="btnCriar" class="header-btn criar">+ Criar Usuário</button>
+            <button id="importarBtn" class="header-btn criar">⬆ Importar</button>
             <button id="btnVoltar" class="header-btn voltar">Voltar</button>
         </div>
 
         <button id="theme-toggle" aria-label="Alternar tema" title="Alternar tema (Claro/Escuro)">🌙</button>
     </header>
+
+    <div id="statusFeedback" class="status-feedback hidden">
+        <p id="feedbackMessage"></p>
+    </div>
 
     <main class="container">
 
@@ -120,7 +125,28 @@
             </form>
         </div>
     </div>
-    
+    <!-- POPUP DE IMPORTAÇÃO -->
+    <div class="popup hidden" id="popupImportar">
+        <div class="popup-content">
+            <button class="fechar-popup" onclick="fecharPopup('popupImportar')">&times;</button>
+            <h2>Importar Arquivos</h2>
+            <form id="form-importar">
+                <label>Tipo de Importação:</label>
+                <select id="tipo_importacao" name="tipo_importacao" required>
+                    <option value="">Selecione</option>
+                    <option value="usuarios">Usuários</option>
+                </select>
+
+                <label>Arquivo:</label>
+                <input type="file" id="arquivo" name="arquivo" accept=".csv,.xlsx" required>
+
+                <div class="popup-actions">
+                    <button type="submit" class="salvar">Importar</button>
+                    <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <footer>
         © 2025 CobAle — Painel Administrativo
     </footer>

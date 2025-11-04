@@ -310,15 +310,22 @@ body.dark-mode footer {
 }
 
 #sair-btn {
+    top: 1rem;
     right: 5rem;
     background-color: #e74c3c;
 }
 
-#controle-btn {
+#usuario-btn {
+    top: 1rem;
     right: 9rem;
     background-color: #3498db;
 }
 
+#contrato-btn {
+    top: 3.5rem;
+    right: 9rem;
+    background-color: #227660;
+}
 .header-btn:hover {
     transform: scale(1.05);
     opacity: 0.85;
@@ -329,13 +336,13 @@ body.dark-mode #sair-btn {
     background-color: #c0392b;
 }
 
-body.dark-mode #controle-btn {
+body.dark-mode #usuario-btn {
     background-color: #2980b9;
 }
 
 
 @media (max-width: 768px) {
-    #controle-btn, #sair-btn, #theme-toggle {
+    #usuario-btn, #sair-btn, #theme-toggle {
         position: static;
         display: block;
         width: 100%;

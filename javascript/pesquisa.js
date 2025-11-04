@@ -137,16 +137,16 @@ const toggleBtn = document.getElementById('theme-toggle');
 
     // ===== Botões Sair e Controle =====
     const sairBtn = document.getElementById('sair-btn');
-    const controleBtn = document.getElementById('controle-btn');
+    const usuarioBtn = document.getElementById('usuario-btn');
+    const contratoBtn = document.getElementById('contrato-btn');
 
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     if (!usuario) {
         window.location.href = "login.html";
     }
 
-    // Mostrar botão Controle apenas para gerente ou supervisor
     if (usuario.cargo === 'gerente' || usuario.cargo === 'supervisor') {
-        controleBtn.style.display = 'inline-block';
+        usuarioBtn.style.display = 'inline-block';
     }
 
     sairBtn.addEventListener('click', () => {
@@ -154,6 +154,9 @@ const toggleBtn = document.getElementById('theme-toggle');
         window.location.href = "login.html";
     });
 
-    controleBtn.addEventListener('click', () => {
+    usuarioBtn.addEventListener('click', () => {
         window.location.href = "controle_usuario.html";
+    });
+    contratoBtn.addEventListener('click', () => {
+        window.location.href = "controle_contrato.html";
     });

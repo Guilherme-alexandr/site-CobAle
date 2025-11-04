@@ -11,25 +11,55 @@ const btnLimparFiltros = document.getElementById("btnLimparFiltros");
 
 async function carregarUsuarios() {
     try {
-        const resp = await fetch(`${API_BASE}/user/listar`);
-        const usuarios = await resp.json();
-        tabelaBody.innerHTML = "";
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        const token = localStorage.getItem("token");
 
+        if (!usuario || (usuario.cargo !== "supervisor" && usuario.cargo !== "gerente")) {
+            alert("Acesso negado: você não tem permissão para visualizar esta página.");
+            window.location.href = "pesquisa.html";
+            return;
+        }
+
+        const resp = await fetch(`${API_BASE}/usuarios/listar`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const usuarios = await resp.json();
+        console.log("Resposta recebida:", usuarios);
+
+        if (!resp.ok) {
+            console.error("Erro de resposta:", usuarios);
+            return;
+        }
+
+        tabelaBody.innerHTML = "";
         usuarios.forEach(u => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-        <td>${u.nome}</td>
-        <td>${u.login}</td>
-        <td>${"*".repeat(6)}</td>
-        <td>${u.cargo}</td>
-        <td><button class="editar" onclick="abrirEdicao(${u.id}, '${u.nome}', '${u.login}', '${u.cargo}')">Editar</button></td>
-      `;
+                <td>${u.nome}</td>
+                <td>${u.login}</td>
+                <td>${"*".repeat(6)}</td>
+                <td>${u.cargo}</td>
+                <td>
+                    <button class="editar" 
+                        onclick="abrirEdicao(${u.id}, '${u.nome}', '${u.login}', '${u.cargo}')">
+                        Editar
+                    </button>
+                </td>
+            `;
             tabelaBody.appendChild(tr);
         });
+
     } catch (err) {
         console.error("Erro ao carregar usuários:", err);
     }
 }
+
+
 
 function aplicarFiltros() {
   const termo = pesquisaNome.value.toLowerCase();
@@ -81,7 +111,7 @@ async function salvarEdicao(e, id) {
     const body = { nome, login, cargo };
     if (senha) body.senha = senha;
 
-    const resp = await fetch(`${API_BASE}/user/atualizar/${id}`, {
+    const resp = await fetch(`${API_BASE}/usuarios/atualizar/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -98,7 +128,7 @@ async function salvarEdicao(e, id) {
 
 async function excluirUsuario(id) {
     if (!confirm("Tem certeza que deseja excluir este usuário?")) return;
-    const resp = await fetch(`${API_BASE}/user/deletar/${id}`, { method: "DELETE" });
+    const resp = await fetch(`${API_BASE}/usuarios/deletar/${id}`, { method: "DELETE" });
     if (resp.ok) {
         alert("Usuário excluído!");
         fecharPopups();
@@ -121,7 +151,7 @@ document.getElementById("formCriar").addEventListener("submit", async e => {
     const senha = document.getElementById("novaSenha").value;
     const cargo = document.getElementById("novoCargo").value;
 
-    const resp = await fetch(`${API_BASE}/user/criar`, {
+    const resp = await fetch(`${API_BASE}/usuarios/criar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, login, senha, cargo })
@@ -136,12 +166,88 @@ document.getElementById("formCriar").addEventListener("submit", async e => {
     }
 });
 
+document.getElementById("importarBtn").addEventListener("click", function() {
+    document.getElementById("popupImportar").classList.remove("hidden");
+});
+
+function fecharPopup(id) {
+    document.getElementById(id).classList.add("hidden");
+}
+
+document.getElementById("form-importar").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const tipoImportacao = document.getElementById("tipo_importacao").value;
+    const arquivo = document.getElementById("arquivo").files[0];
+
+    if (!tipoImportacao || !arquivo) {
+        exibirFeedback("erro", "Por favor, selecione o tipo de importação e o arquivo.");
+        return;
+    }
+
+    const dadosImportacao = new FormData();
+    dadosImportacao.append('tipo_importacao', tipoImportacao);
+    dadosImportacao.append('arquivo', arquivo);
+
+    fetch(`${API_BASE}/importar-exemplo-usuarios`, {
+        method: 'GET',
+        body: dadosImportacao,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.sucesso) {
+            exibirFeedback("sucesso", `${data.usuariosImportados} usuários importados com sucesso.`);
+            exibirResultadoImportacao(data.resultados);
+        } else {
+            exibirFeedback("erro", "Erro ao importar os usuários.");
+        }
+    })
+    .catch(error => {
+        exibirFeedback("erro", "Erro ao enviar o arquivo.");
+    });
+
+    fecharPopup('popupImportar');
+});
+
+function exibirFeedback(tipo, mensagem) {
+    const statusFeedback = document.getElementById('statusFeedback');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+
+    feedbackMessage.textContent = mensagem;
+
+    statusFeedback.classList.remove('sucesso', 'erro');
+    statusFeedback.classList.add(tipo);
+
+    statusFeedback.classList.remove('hidden');
+
+    setTimeout(() => {
+        statusFeedback.classList.add('hidden');
+    }, 5000);
+}
+
+function exibirResultadoImportacao(resultados) {
+    const tabelaResultado = document.getElementById('tabelaResultadoImportacao');
+    const tbody = tabelaResultado.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    resultados.forEach(resultado => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${resultado.nome}</td>
+            <td>${resultado.login}</td>
+            <td>${resultado.status}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    tabelaResultado.classList.remove('hidden');
+}
+
+
 carregarUsuarios();
 
-// ===== Alternar Tema =====
 const themeToggle = document.getElementById("theme-toggle");
 
-// Verifica se o usuário já tinha um tema salvo
 if (localStorage.getItem("tema") === "dark") {
   document.body.classList.add("dark-mode");
   themeToggle.textContent = "☀️";

@@ -24,11 +24,27 @@ async function buscarClientePorCpf(cpf) {
         const response = await fetch(`${API_BASE}/clientes/buscar_por_cpf/${cpf}`);
         if (!response.ok) throw new Error("Erro ao buscar cliente.");
 
-        const cliente = await response.json();
+        // ✅ A API retorna um array, então precisamos extrair o primeiro cliente
+        const clientes = await response.json();
+
+        if (!clientes || clientes.length === 0) {
+            throw new Error("Nenhum cliente encontrado para este CPF.");
+        }
+
+        const cliente = clientes[0]; // pega o primeiro cliente
+        console.log("Cliente retornado da API:", cliente);
+
         preencherInfoCliente(cliente);
-        buscarContratos(cliente.id);
+
+        // ✅ Chama buscarContratos com o ID correto
+        if (cliente.id) {
+            await buscarContratos(cliente.id);
+        } else {
+            console.error("Cliente sem ID válido:", cliente);
+            alert("Cliente encontrado, mas sem ID válido.");
+        }
     } catch (error) {
-        console.error(error);
+        console.error("Erro ao buscar cliente:", error);
         alert("Erro ao buscar dados do cliente.");
     }
 }
@@ -45,12 +61,12 @@ function preencherInfoCliente(cliente) {
 
     const contatosBody = document.getElementById("tabelaContatos");
     contatosBody.innerHTML = `
-    <tr>
-      <td>${cliente.telefone || "Sem telefone"}</td>
-      <td>${cliente.email || "Sem email"}</td>
-      <td><button class="btn-editar" onclick="editarContato()">✏️ Editar</button></td>
-    </tr>
-  `;
+        <tr>
+            <td>${cliente.telefone || "Sem telefone"}</td>
+            <td>${cliente.email || "Sem email"}</td>
+            <td><button class="btn-editar" onclick="editarContato()">✏️ Editar</button></td>
+        </tr>
+    `;
 
     const enderecoSpan = document.getElementById("enderecoCliente");
     if (cliente.enderecos && cliente.enderecos.length > 0) {
@@ -70,12 +86,13 @@ async function buscarContratos(clienteId) {
 
         if (!response.ok) throw new Error("Erro ao buscar contratos.");
         const contratos = await response.json();
-        await preencherContratos(contratos); // AGORA É async
+        await preencherContratos(contratos);
     } catch (error) {
         console.error(error);
         alert("Erro ao buscar contratos do cliente.");
     }
 }
+
 
 async function preencherContratos(contratos) {
     const tbody = document.getElementById("tabelaContratos");
@@ -93,7 +110,6 @@ async function preencherContratos(contratos) {
             Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24))
         );
 
-        // Definir status visual (padrão: em aberto = vermelho)
         let statusClasse = "status-vermelho";
         let statusTitle = "Em aberto";
 
