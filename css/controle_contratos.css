@@ -57,11 +57,13 @@ header h1 {
 }
 
 .header-btn.voltar {
-    background-color: #e74c3c; /* vermelho para destacar */
+    background-color: #e74c3c;
+    /* vermelho para destacar */
 }
 
 .header-btn.criar {
-    background-color: #227660; /* verde */
+    background-color: #227660;
+    /* verde */
 }
 
 .header-btn:hover {
@@ -118,6 +120,7 @@ td {
     color: #333;
     text-align: left;
 }
+
 
 /* ===== POPUPS ===== */
 .popup {
@@ -252,7 +255,7 @@ body.dark-mode header {
 
 /* Tabela */
 body.dark-mode .tabela-container {
-    background-color: #1c1c1c;
+    background-color: #fbfbfb;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
@@ -308,6 +311,7 @@ body.dark-mode footer {
         opacity: 0;
         transform: translateY(-20px) scale(0.97);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
