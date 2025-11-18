@@ -1,26 +1,69 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #1e3a5f;
+    --secondary-color: #274b8a;
+    --accent-color: #1dd1a1;
+    --accent-hover: #10ac84;
+    --light-bg: #f6f8fc;
+    --dark-bg: #121212;
+    --text-light: #1e3a5f;
+    --text-dark: #e0e0e0;
+    --border-color: #d0d7de;
+    --shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f6f8fc;
+    background-color: var(--light-bg);
     margin: 0;
-    color: #1e3a5f;
+    color: var(--text-light);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-
+    line-height: 1.6;
+    animation: fadeInPage 0.5s ease;
 }
+
+@keyframes fadeInPage {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 main.container {
     flex: 1;
 }
 
 /* ===== HEADER ===== */
 header {
-    background: linear-gradient(135deg, #1e3a5f, #274b8a);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     text-align: center;
     padding: 1.5rem;
     position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 .header-actions {
@@ -32,33 +75,46 @@ header {
 }
 
 .header-btn {
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     padding: 0.6rem 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .header-btn.voltar {
-    background-color: #95a5a6;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .header-btn.criar {
-    background-color: #1dd1a1;
+    background-color: var(--accent-color);
 }
 
 .header-btn:hover {
     opacity: 0.85;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .status-feedback {
-    padding: 10px;
-    margin: 20px 0;
-    border-radius: 5px;
-    font-size: 1.1em;
-    display: none; 
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    max-width: 1000px;
+    animation: slideIn 0.4s ease;
+    display: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .status-feedback.sucesso {
@@ -70,47 +126,62 @@ header {
     background-color: #F44336;
     color: white;
 }
+
 /* ===== CONTEÚDO ===== */
 .container {
     width: 90%;
     max-width: 1000px;
     margin: 2rem auto;
+    padding: 0 1rem;
 }
 
 /* ===== TABELA ===== */
+.tabela-container {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow-x: hidden;
+    animation: slideIn 0.4s ease 0.2s both;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    min-width: 600px;
 }
 
-th,
-td {
+th, td {
     padding: 1rem;
     border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #1e3a5f;
-    color: white;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
-td {
-    color: #333;
     text-align: left;
 }
 
+th {
+    background-color: var(--primary-color);
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #e8f5e9;
+    transform: scale(1.01);
+    transition: var(--transition);
+}
+
+
 td button {
     border: none;
-    border-radius: 4px;
-    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
     color: white;
     font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .editar {
@@ -119,6 +190,7 @@ td button {
 
 .editar:hover {
     background-color: #2c82c9;
+    transform: scale(1.05);
 }
 
 /* ===== POPUPS REESTILIZADOS ===== */
@@ -169,6 +241,41 @@ td button {
     color: #555;
     cursor: pointer;
     transition: color 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.fechar-popup:hover {
+    color: #333;
+}
+.fechar-popup:active {
+    transform: scale(0.9);
+}
+.fechar-popup {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    box-shadow: var(--shadow);
+}
+.fechar-popup {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    box-shadow: var(--shadow);
+}
+.fechar-popup:active {
+    transform: scale(0.9);
 }
 
 .fechar-popup:hover {
@@ -179,9 +286,13 @@ td button {
 .popup-content h2 {
     text-align: center;
     font-weight: 700;
-    color: #1e3a5f;
+    color: var(--text-light);
     font-size: 1.4rem;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .popup-content form {
@@ -194,13 +305,16 @@ td button {
     font-weight: 600;
     color: #2c3e50;
     margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .popup-content input,
 .popup-content select {
-    padding: 0.7rem 0.9rem;
+    padding: 0.8rem 1rem;
     border-radius: 8px;
-    border: 1px solid #cfd9e2;
+    border: 1px solid var(--border-color);
     background-color: #f9fbfd;
     font-size: 1rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
@@ -208,9 +322,10 @@ td button {
 
 .popup-content input:focus,
 .popup-content select:focus {
-    border-color: #1dd1a1;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(29, 209, 161, 0.15);
     outline: none;
+    transform: scale(1.02);
 }
 
 /* ===== BOTÕES DO POPUP ===== */
@@ -219,25 +334,33 @@ td button {
     justify-content: space-between;
     gap: 0.8rem;
     margin-top: 1.4rem;
+    box-shadow: var(--shadow);
 }
 
 .popup-actions button {
     flex: 1;
     border: none;
     border-radius: 8px;
-    padding: 0.7rem;
+    padding: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
 }
+    
 
 .salvar {
-    background-color: #1dd1a1;
+    background-color: var(--accent-color);
     color: #fff;
 }
 
 .salvar:hover {
-    background-color: #17b890;
+    background-color: var(--accent-hover);
+    transform: scale(1.05);
 }
 
 .excluir {
@@ -247,6 +370,7 @@ td button {
 
 .excluir:hover {
     background-color: #c0392b;
+    transform: scale(1.05);
 }
 
 .cancelar {
@@ -256,6 +380,7 @@ td button {
 
 .cancelar:hover {
     background-color: #7f8c8d;
+    transform: scale(1.05);
 }
 
 /* ===== ANIMAÇÃO POPUP ===== */
@@ -273,14 +398,16 @@ td button {
 /* ===== FILTROS ===== */
 .filtros-usuarios {
     background-color: #ffffff;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     align-items: flex-end;
     margin-bottom: 1.5rem;
+    animation: slideIn 0.4s ease;
+    box-shadow: var(--shadow);
 }
 
 .filtros-usuarios .campo {
@@ -293,38 +420,59 @@ td button {
 .filtros-usuarios label {
     font-weight: 600;
     margin-bottom: 0.3rem;
-    color: #2c3e50;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .filtros-usuarios input,
 .filtros-usuarios select {
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 0.95rem;
-    transition: border-color 0.3s;
+    transition: var(--transition);
+    background: #fff;
 }
 
 .filtros-usuarios input:focus,
 .filtros-usuarios select:focus {
-    border-color: #1dd1a1;
+    border-color: var(--accent-color);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 209, 161, 0.1);
 }
 
 .btn-filtro {
-    padding: 0.8rem 1.2rem;
-    background-color: #1e3a5f;
+    padding: 0.9rem 1.5rem;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
+}
+.btn-filtro svg {
+    fill: white;
+}
+.btn-filtro:active {
+    transform: scale(0.95);
+}
+.btn-filtro:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .btn-filtro:hover {
-    background-color: #274b8a;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
 }
 
 /* ===== BOTÃO DE TEMA ===== */
@@ -341,12 +489,17 @@ td button {
     width: 2.2rem;
     height: 2.2rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
 }
 
 #theme-toggle:hover {
     transform: scale(1.15);
     background: rgba(255, 255, 255, 0.25);
+    box-shadow: var(--shadow);
 }
 
 /* ===== FOOTER ===== */
@@ -356,25 +509,24 @@ footer {
     padding: 1rem;
     font-size: 0.9rem;
     color: #555;
-
+    box-shadow: var(--shadow);
 }
 
 /* ===== TEMA ESCURO ===== */
 body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
+    background-color: var(--dark-bg);
+    color: var(--text-dark);
 }
 
 body.dark-mode header {
     background: linear-gradient(135deg, #0d1b2a, #1b263b);
-    color: #f1f1f1;
-    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
 }
 
 /* Filtros */
 body.dark-mode .filtros-usuarios {
     background-color: #1c1c1c;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .campo label {
@@ -393,18 +545,18 @@ body.dark-mode .campo input::placeholder {
 }
 
 body.dark-mode .btn-filtro {
-    background-color: #10ac84;
+    background-color: var(--accent-color);
     box-shadow: none;
 }
 
 body.dark-mode .btn-filtro:hover {
-    background-color: #0b8b6a;
+    background-color: var(--accent-hover);
 }
 
 /* Tabela */
 body.dark-mode .tabela-container {
     background-color: #1c1c1c;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode table {
@@ -423,12 +575,18 @@ body.dark-mode tr:hover {
 body.dark-mode td {
     border-bottom: 1px solid #333;
 }
+body.dark-mode td button.editar {
+    background-color: #2980b9;
+}
+body.dark-mode td button.editar:hover {
+    background-color: #2471a3;
+}
 
 /* Popups */
 body.dark-mode .popup-content {
     background-color: #1e1e1e;
     color: #eee;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.7);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
 }
 
 body.dark-mode .popup-content input,
@@ -440,7 +598,7 @@ body.dark-mode .popup-content select {
 
 body.dark-mode .popup-content input:focus,
 body.dark-mode .popup-content select:focus {
-    border-color: #10ac84;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(16, 172, 132, 0.2);
 }
 
@@ -451,4 +609,34 @@ body.dark-mode .fechar-popup {
 body.dark-mode footer {
     background-color: #0d1b2a;
     color: #aaa;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem auto;
+        padding: 0 0.8rem;
+    }
+
+    .filtros-usuarios {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .popup-content {
+        padding: 1.5rem;
+        max-width: 90%;
+    }
+
+    .popup-actions {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
 }

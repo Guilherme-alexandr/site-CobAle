@@ -5,61 +5,121 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pesquisa - CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/pesquisa.css" />
 </head>
 
 <body>
 
     <header>
-        <h1>CobAle</h1>
-        <p>Consulta de Contratos</p>
-        <button id="usuario-btn" class="header-btn">Controle de Usuarios</button>
-        <button id="contrato-btn" class="header-btn">Controle de Contratos</button>
-        <button id="sair-btn" class="header-btn">Sair</button>
-        <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-file-contract"></i> CobAle</h1>
+                <p>Consulta de Contratos</p>
+            </div>
+            <nav class="header-nav">
+                <button id="usuario-btn" class="header-btn" type="button" title="Gerenciar usuários"><i
+                        class="fas fa-users"></i> Controle de Usuários</button>
+                <button id="contrato-btn" class="header-btn" type="button" title="Gerenciar contratos"><i
+                        class="fas fa-folder-open"></i> Controle de Contratos</button>
+                <button id="sair-btn" class="header-btn" type="button" title="Sair do sistema"><i
+                        class="fas fa-sign-out-alt"></i> Sair</button>
+                <button id="theme-toggle" aria-label="Alternar tema" type="button" title="Alternar para modo escuro"><i
+                        class="fas fa-moon"></i></button>
+            </nav>
+        </div>
     </header>
 
-
     <main class="container">
-        <section class="filtros">
-            <div class="campo">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" placeholder="Ex: João Silva" />
+        <!-- Formulário de pesquisa -->
+        <form id="formPesquisa" class="filtros" autocomplete="off" onsubmit="event.preventDefault(); buscar();">
+            <legend><i class="fas fa-filter"></i> Filtros de Pesquisa</legend>
+            <fieldset class="form-section">
+
+                <div id="filtrosPrincipais" class="filtros-grid">
+                    <!-- Filtros principais fixos -->
+                    <div class="campo">
+                        <label for="nome"><i class="fas fa-user"></i> Nome do Cliente</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite o nome">
+                    </div>
+
+                    <div class="campo">
+                        <label for="cpf"><i class="fas fa-id-card"></i> CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF (somente números)">
+                    </div>
+
+                    <div class="campo">
+                        <label for="numeroContrato"><i class="fas fa-hashtag"></i> Nº Contrato</label>
+                        <input type="text" id="numeroContrato" name="numeroContrato" placeholder="Número do contrato">
+                    </div>
+                </div>
+
+                <!-- Aqui os filtros extras serão criados dinamicamente -->
+                <div id="filtrosExtrasContainer" class="filtros-grid"></div>
+
+                <!-- Select para adicionar novos filtros -->
+                <div class="campo adicionar-filtro">
+                    <label for="selectFiltro"><i class="fas fa-plus-circle"></i> Adicionar filtro:</label>
+                    <select id="selectFiltro" name="selectFiltro">
+                        <option value="">Selecione...</option>
+                        <option value="possuiAcordo">Possui Acordo</option>
+                        <option value="filial">Filial</option>
+                        <option value="valorTotal">Valor Total</option>
+                        <option value="telefone">Telefone</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <!-- Botões de ação -->
+            <div class="acoes-filtro">
+                <button type="submit" id="btnBuscar" title="Executar busca"><i class="fas fa-search"></i>
+                    Buscar</button>
+                <button type="button" id="btnLimpar" onclick="limparFiltros()" title="Limpar todos os filtros"><i
+                        class="fas fa-broom"></i> Limpar</button>
             </div>
+        </form>
 
-            <div class="campo">
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" placeholder="Ex: 12345678901" />
-            </div>
-
-            <div class="campo">
-                <label for="numeroContrato">Nº Contrato</label>
-                <input type="text" id="numeroContrato" placeholder="Ex: 123456" />
-            </div>
-
-            <button onclick="buscar()">Buscar</button>
-        </section>
-
+        <!-- Tabela de resultados -->
         <section class="tabela-container">
             <table id="resultado">
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Nº Contrato</th>
-                        <th>Valor Total</th>
-                        <th>Acordo</th>
-                        <th>Ações</th>
+                        <th><input type="checkbox" id="selectTodos" aria-label="Selecionar todos"></th>
+                        <th><i class="fas fa-user"></i> Nome</th>
+                        <th><i class="fas fa-id-card"></i> CPF</th>
+                        <th><i class="fas fa-hashtag"></i> Nº Contrato</th>
+                        <th><i class="fas fa-dollar-sign"></i> Valor Total</th>
+                        <th><i class="fas fa-handshake"></i> Acordo</th>
+                        <th><i class="fas fa-cogs"></i> Ações</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Exemplo -->
+                    <tr>
+                        <td><input type="checkbox" name="selectRow" aria-label="Selecionar linha"></td>
+                        <td>Nome Exemplo</td>
+                        <td>000.000.000-00</td>
+                        <td>1234</td>
+                        <td>R$ 1.000,00</td>
+                        <td>Sim</td>
+                        <td><button type="button" class="btn-abrir" aria-label="Abrir contrato"
+                                title="Abrir detalhes do contrato"><i class="fas fa-external-link-alt"></i>
+                                Abrir</button></td>
+                    </tr>
+                </tbody>
             </table>
         </section>
     </main>
 
     <footer>
-        <p>© 2025 CobAle — Sistema de Gestão de Contratos</p>
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Sistema de Gestão de Contratos</p>
     </footer>
+
+    <div id="loader" class="loader-overlay" style="display: none;">
+        <div class="loader"></div>
+        <p>Buscando dados...</p>
+    </div>
+
 
     <script src="../javascript/pesquisa.js"></script>
 </body>

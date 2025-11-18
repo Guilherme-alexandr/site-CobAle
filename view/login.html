@@ -1,42 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <title>Login CobAle</title>
+    <title>Login - CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/login.css">
-    <link rel="stylesheet" href="../css/pesquisa.css">
 </head>
 
 <body>
     <header>
-        <h1>CobAle</h1>
-        <p>Faça login para acessar o sistema</p>
-        <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-file-contract"></i> CobAle</h1>
+                <p>Faça login para acessar o sistema</p>
+            </div>
+            <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i class="fas fa-moon"></i></button>
+        </div>
     </header>
 
     <div class="container">
-        <div class="filtros" style="max-width: 400px; margin: 2rem auto; text-align: center;">
-            <h2>Login</h2>
+        <div class="login-container">
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
             <form id="loginForm">
                 <div class="campo">
-                    <label for="login">Login:</label>
-                    <input type="text" id="login" placeholder="Digite seu login">
+                    <label for="login"><i class="fas fa-user"></i> Login:</label>
+                    <input type="text" id="login" placeholder="Digite seu login" required>
                 </div>
                 <div class="campo">
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" placeholder="Digite sua senha">
+                    <label for="senha"><i class="fas fa-lock"></i> Senha:</label>
+                    <input type="password" id="senha" placeholder="Digite sua senha" required>
                 </div>
-                <button type="submit">Entrar</button>
+                <button type="submit" title="Entrar no sistema"><i class="fas fa-arrow-right"></i> Entrar</button>
             </form>
-            <div id="mensagem" style="margin-top: 1rem; color: red;"></div>
-
+            <div id="mensagem" class="mensagem"></div>
         </div>
     </div>
 
     <footer>
-        CobAle © 2025
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Sistema de Gestão de Contratos</p>
     </footer>
+
     <script src="../javascript/login.js"></script>
 </body>
 

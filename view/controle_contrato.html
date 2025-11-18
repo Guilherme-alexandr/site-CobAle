@@ -4,22 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Contratos</title>
+    <title>Controle de Contratos - CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/css/controle_contratos.css">
 </head>
 
 <body>
     <!-- ===== HEADER ===== -->
     <header>
-        <h1>📊 Controle de Contratos</h1>
-        <div class="header-actions">
-            <button class="header-btn criar" id="criarClienteBtn" aria-label="Criar Cliente">+ Cliente</button>
-            <button class="header-btn criar" id="criarContratoBtn" aria-label="Criar Contrato">+ Contrato</button>
-            <button class="header-btn criar" id="importarBtn" aria-label="Importar Arquivo">⬆ Importar</button>
-            <button class="header-btn voltar" onclick="window.location.href='pesquisa.html'"
-                aria-label="Voltar para Pesquisa">Voltar</button>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-file-contract"></i> Controle de Contratos</h1>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn criar" id="criarClienteBtn" title="Criar novo cliente"><i class="fas fa-user-plus"></i> Cliente</button>
+                <button class="header-btn criar" id="criarContratoBtn" title="Criar novo contrato"><i class="fas fa-plus"></i> Contrato</button>
+                <button class="header-btn criar" id="importarBtn" title="Importar arquivos"><i class="fas fa-upload"></i> Importar</button>
+                <button class="header-btn voltar" onclick="window.location.href='pesquisa.html'" title="Voltar à pesquisa"><i class="fas fa-arrow-left"></i> Voltar</button>
+            </div>
+            <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i class="fas fa-moon"></i></button>
         </div>
-        <button id="theme-toggle" aria-label="Alterar Tema">🌙</button>
     </header>
 
     <!-- ===== MAIN CONTENT ===== -->
@@ -28,18 +32,18 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Cliente</th>
-                        <th>CPF</th>
-                        <th>Telefone</th>
-                        <th>Email</th>
-                        <th>Contrato</th>
-                        <th>Valor</th>
-                        <th>Filial</th>
-                        <th>Vencimento</th>
+                        <th><i class="fas fa-user"></i> Cliente</th>
+                        <th><i class="fas fa-id-card"></i> CPF</th>
+                        <th><i class="fas fa-phone"></i> Telefone</th>
+                        <th><i class="fas fa-envelope"></i> Email</th>
+                        <th><i class="fas fa-file-signature"></i> Contrato</th>
+                        <th><i class="fas fa-dollar-sign"></i> Valor</th>
+                        <th><i class="fas fa-building"></i> Filial</th>
+                        <th><i class="fas fa-calendar-alt"></i> Vencimento</th>
                     </tr>
                 </thead>
                 <tbody id="tabela-body">
-
+                    <!-- Dados inseridos dinamicamente -->
                 </tbody>
             </table>
         </section>
@@ -47,38 +51,37 @@
 
     <!-- ===== FOOTER ===== -->
     <footer>
-        © 2025 CobAle - Sistema de Cobrança e Acordos
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Sistema de Cobrança e Acordos</p>
     </footer>
 
     <!-- ===== POPUP - NOVO CLIENTE ===== -->
     <div class="popup hidden" id="popupCliente">
         <div class="popup-content">
-            <button class="fechar-popup" onclick="fecharPopup('popupCliente')">&times;</button>
-            <h2>Novo Cliente</h2>
+            <button class="fechar-popup" onclick="fecharPopup('popupCliente')" title="Fechar popup">&times;</button>
+            <h2><i class="fas fa-user-plus"></i> Novo Cliente</h2>
             <form id="form-criar-cliente" aria-labelledby="popupCliente">
-                <label for="nome">Nome:</label>
+                <label for="nome"><i class="fas fa-user"></i> Nome:</label>
                 <input type="text" id="nome" name="nome" required>
 
-                <label for="cpf">CPF:</label>
+                <label for="cpf"><i class="fas fa-id-card"></i> CPF:</label>
                 <input type="text" id="cpf" name="cpf" maxlength="11" required>
 
-                <label for="telefone">Telefone:</label>
+                <label for="telefone"><i class="fas fa-phone"></i> Telefone:</label>
                 <input type="text" id="telefone" name="telefone">
 
-                <label for="email">Email:</label>
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
                 <input type="email" id="email" name="email">
 
-                <h3>Endereço</h3>
-                <input type="text" id="rua" name="rua" placeholder="Rua" required>
-                <input type="text" id="numero" name="numero" placeholder="Número" required>
-                <input type="text" id="cidade" name="cidade" placeholder="Cidade" required>
-                <input type="text" id="estado" name="estado" placeholder="UF" maxlength="2" pattern="[A-Za-z]{2}"
-                    required>
-                <input type="text" id="cep" name="cep" placeholder="CEP" required>
+                <h3><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+                <input type="text" id="rua" name="rua" placeholder="Rua">
+                <input type="text" id="numero" name="numero" placeholder="Número">
+                <input type="text" id="cidade" name="cidade" placeholder="Cidade">
+                <input type="text" id="estado" name="estado" placeholder="UF" maxlength="2" pattern="[A-Za-z]{2}">
+                <input type="text" id="cep" name="cep" placeholder="CEP">
 
                 <div class="popup-actions">
-                    <button type="submit" class="salvar">Salvar</button>
-                    <button type="button" class="cancelar" onclick="fecharPopup('popupCliente')">Cancelar</button>
+                    <button type="submit" class="salvar" title="Salvar cliente"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="button" class="cancelar" onclick="fecharPopup('popupCliente')" title="Cancelar criação"><i class="fas fa-times"></i> Cancelar</button>
                 </div>
             </form>
         </div>
@@ -87,24 +90,24 @@
     <!-- ===== POPUP - NOVO CONTRATO ===== -->
     <div class="popup hidden" id="popupContrato">
         <div class="popup-content">
-            <button class="fechar-popup" onclick="fecharPopup('popupContrato')">&times;</button>
-            <h2>Novo Contrato</h2>
+            <button class="fechar-popup" onclick="fecharPopup('popupContrato')" title="Fechar popup">&times;</button>
+            <h2><i class="fas fa-file-signature"></i> Novo Contrato</h2>
             <form id="form-criar-contrato" aria-labelledby="popupContrato">
-                <label for="cpf_cliente">CPF do Cliente:</label>
+                <label for="cpf_cliente"><i class="fas fa-id-card"></i> CPF do Cliente:</label>
                 <input type="text" id="cpf_cliente" name="cpf_cliente" required>
 
-                <label for="valor_total">Valor Total:</label>
+                <label for="valor_total"><i class="fas fa-dollar-sign"></i> Valor Total:</label>
                 <input type="number" id="valor_total" name="valor_total" step="0.01" required>
 
-                <label for="filial">Filial:</label>
+                <label for="filial"><i class="fas fa-building"></i> Filial:</label>
                 <input type="text" id="filial" name="filial" required>
 
-                <label for="vencimento">Data de Vencimento:</label>
+                <label for="vencimento"><i class="fas fa-calendar-alt"></i> Data de Vencimento:</label>
                 <input type="date" id="vencimento" name="vencimento" required>
 
                 <div class="popup-actions">
-                    <button type="submit" class="salvar">Salvar</button>
-                    <button type="button" class="cancelar" onclick="fecharPopup('popupContrato')">Cancelar</button>
+                    <button type="submit" class="salvar" title="Salvar contrato"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="button" class="cancelar" onclick="fecharPopup('popupContrato')" title="Cancelar criação"><i class="fas fa-times"></i> Cancelar</button>
                 </div>
             </form>
         </div>
@@ -113,10 +116,10 @@
     <!-- ===== POPUP - IMPORTAR ARQUIVOS ===== -->
     <div class="popup hidden" id="popupImportar">
         <div class="popup-content">
-            <button class="fechar-popup" onclick="fecharPopup('popupImportar')">&times;</button>
-            <h2>Importar Arquivos</h2>
+            <button class="fechar-popup" onclick="fecharPopup('popupImportar')" title="Fechar popup">&times;</button>
+            <h2><i class="fas fa-upload"></i> Importar Arquivos</h2>
             <form id="form-importar" aria-labelledby="popupImportar">
-                <label for="tipo_importacao">Tipo de Importação:</label>
+                <label for="tipo_importacao"><i class="fas fa-list"></i> Tipo de Importação:</label>
                 <select id="tipo_importacao" name="tipo_importacao" required>
                     <option value="">Selecione</option>
                     <option value="clientes">Clientes</option>
@@ -125,8 +128,8 @@
                 </select>
 
                 <div class="popup-actions">
-                    <button type="submit" class="salvar">Importar</button>
-                    <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')">Cancelar</button>
+                    <button type="submit" class="salvar" title="Importar arquivo"><i class="fas fa-upload"></i> Importar</button>
+                    <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')" title="Cancelar importação"><i class="fas fa-times"></i> Cancelar</button>
                 </div>
             </form>
         </div>

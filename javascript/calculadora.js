@@ -5,11 +5,11 @@ let clienteIdGlobal = null;
 let acordoGlobal = null;
 
 function abrirCalculadora() {
-    document.getElementById("popupCalculadora").style.display = "block";
+    document.getElementById("popupCalculadora").classList.remove("hidden");
 }
 
 function fecharCalculadora() {
-    document.getElementById("popupCalculadora").style.display = "none";
+    document.getElementById("popupCalculadora").classList.add("hidden");
 }
 
 async function simularCalculo() {
@@ -92,9 +92,6 @@ async function simularCalculo() {
         alert(`Erro na simulação: ${e.message}`);
     }
 }
-
-
-
 
 async function inicializarCalculadoraComContrato(contrato) {
     contratoGlobal = contrato;
@@ -229,12 +226,12 @@ function renderizarResumoAcordo(acordo) {
             <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
             <h3>Acordo Formalizado</h3>
             <div class="acoes-wrapper">
-                <button class="btn-acoes" onclick="toggleMenuAcoes()">⚙️ Ações</button>
+                <button class="btn-acoes" onclick="toggleMenuAcoes()" title="Ações do acordo"><i class="fas fa-cogs"></i> Ações</button>
                 <div id="menuAcoesAcordo" class="menu-acoes" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">
-                <button onclick="editarAcordo()">📝 Editar</button>
-                <button onclick="deletarAcordo()">🗑️ Excluir</button>
-                <button onclick="gerarBoleto(${acordo.id})">💳 Gerar Boleto</button>
-                <button onclick="enviarBoleto(${acordo.id}, ${acordo.boleto_id})">📨 Enviar Boleto</button>
+                <button onclick="editarAcordo()" title="Editar acordo"><i class="fas fa-edit"></i> Editar</button>
+                <button onclick="deletarAcordo()" title="Excluir acordo"><i class="fas fa-trash"></i> Excluir</button>
+                <button onclick="gerarBoleto(${acordo.id})" title="Gerar boleto"><i class="fas fa-file-invoice-dollar"></i> Gerar Boleto</button>
+                <button onclick="enviarBoleto(${acordo.id}, ${acordo.boleto_id})" title="Enviar boleto"><i class="fas fa-paper-plane"></i> Enviar Boleto</button>
                 </div>
             </div>
             </div>
@@ -282,9 +279,9 @@ function gerarTabelaParcelas(parcelamento) {
         <table class="tabela-acordo">
             <thead>
                 <tr>
-                    <th>Parcela</th>
-                    <th>Vencimento</th>
-                    <th>Valor</th>
+                    <th><i class="fas fa-hashtag"></i> Parcela</th>
+                    <th><i class="fas fa-calendar-alt"></i> Vencimento</th>
+                    <th><i class="fas fa-dollar-sign"></i> Valor</th>
                 </tr>
             </thead>
             <tbody>
@@ -316,7 +313,7 @@ async function editarAcordo() {
         document.getElementById("btnFormalizar").style.display = "none";
         document.getElementById("btnSalvarEdicao").style.display = "inline-block";
 
-        document.getElementById("popupCalculadora").style.display = "block";
+        document.getElementById("popupCalculadora").classList.remove("hidden");
 
     } catch (erro) {
         console.error("Erro ao carregar acordo para edição:", erro);
@@ -325,7 +322,7 @@ async function editarAcordo() {
 }
 
 function fecharPopupEditarAcordo() {
-    document.getElementById("popupEditarAcordo").style.display = "none";
+    document.getElementById("popupEditarAcordo").classList.add("hidden");
 }
 
 async function salvarAcordoEditado() {
@@ -433,49 +430,37 @@ async function gerarBoleto(acordoId) {
         }
 
         const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-
-        window.open(url, "_blank");
-
-    } catch (error) {
-        console.error("Erro:", error);
-        alert("Não foi possível gerar o boleto.");
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `boleto_acordo_${acordoId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
     } finally {
         overlay.style.display = "none";
     }
 }
-
-
-async function enviarBoleto(acordoId) {
-    console.log("acordoId:", acordoId);
-
-    if (!acordoId) {
-        alert("Erro: acordo_id não foi informado!");
-        return;
-    }
-
+async function enviarBoleto(acordoId, boletoId) {
     try {
-        const response = await fetch(`${API_BASE}acordos/enviar_boleto/${acordoId}`, {
+        const resposta = await fetch(`${API_BASE}/acordos/enviar_boleto`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                acordo_id: acordoId,
+                boleto_id: boletoId,
+                cliente_id: clienteIdGlobal
+            })
         });
 
-        let data;
-        try {
-            data = await response.json();
-        } catch {
-            const text = await response.text();
-            throw new Error(`Resposta inesperada do servidor: ${text.substring(0, 100)}...`);
+        if (!resposta.ok) {
+            throw new Error("Erro ao enviar boleto.");
         }
 
-        if (!response.ok) {
-            throw new Error(data.erro || "Erro ao enviar boleto.");
-        }
-
-        alert(data.mensagem || "Boleto enviado com sucesso!");
-
-    } catch (error) {
-        console.error("Erro ao enviar boleto:", error);
-        alert(error.message || "Não foi possível enviar o boleto.");
+        alert("Boleto enviado com sucesso.");
+    } catch (erro) {
+        console.error("Erro ao enviar boleto:", erro);
+        alert("Erro ao enviar boleto.");
     }
 }

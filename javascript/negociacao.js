@@ -1,4 +1,5 @@
 let clienteGlobal = null;
+let enderecoId = null; // Adicionado para armazenar o ID do endereço
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
@@ -24,19 +25,17 @@ async function buscarClientePorCpf(cpf) {
         const response = await fetch(`${API_BASE}/clientes/buscar_por_cpf/${cpf}`);
         if (!response.ok) throw new Error("Erro ao buscar cliente.");
 
-        // ✅ A API retorna um array, então precisamos extrair o primeiro cliente
         const clientes = await response.json();
 
         if (!clientes || clientes.length === 0) {
             throw new Error("Nenhum cliente encontrado para este CPF.");
         }
 
-        const cliente = clientes[0]; // pega o primeiro cliente
+        const cliente = clientes[0];
         console.log("Cliente retornado da API:", cliente);
 
         preencherInfoCliente(cliente);
 
-        // ✅ Chama buscarContratos com o ID correto
         if (cliente.id) {
             await buscarContratos(cliente.id);
         } else {
@@ -56,15 +55,14 @@ function preencherInfoCliente(cliente) {
 
     document.getElementById("nomeCliente").textContent = cliente.nome;
     document.getElementById("cpfCliente").textContent = cliente.cpf;
-    document.getElementById("emailCliente").textContent =
-        cliente.email || "Não informado";
+    document.getElementById("emailCliente").textContent = cliente.email || "Não informado";
 
     const contatosBody = document.getElementById("tabelaContatos");
     contatosBody.innerHTML = `
         <tr>
             <td>${cliente.telefone || "Sem telefone"}</td>
             <td>${cliente.email || "Sem email"}</td>
-            <td><button class="btn-editar" onclick="editarContato()">✏️ Editar</button></td>
+            <td><button class="btn-editar" onclick="editarContato()" title="Editar contato"><i class="fas fa-edit"></i> Editar</button></td>
         </tr>
     `;
 
@@ -80,9 +78,7 @@ function preencherInfoCliente(cliente) {
 // ===== BUSCA CONTRATOS =====
 async function buscarContratos(clienteId) {
     try {
-        const response = await fetch(
-            `${API_BASE}/contratos/buscar_por_cliente/${clienteId}`
-        );
+        const response = await fetch(`${API_BASE}/contratos/buscar_por_cliente/${clienteId}`);
 
         if (!response.ok) throw new Error("Erro ao buscar contratos.");
         const contratos = await response.json();
@@ -92,7 +88,6 @@ async function buscarContratos(clienteId) {
         alert("Erro ao buscar contratos do cliente.");
     }
 }
-
 
 async function preencherContratos(contratos) {
     const tbody = document.getElementById("tabelaContratos");
@@ -105,10 +100,7 @@ async function preencherContratos(contratos) {
         const vencimentoFormatado = vencimentoDate.toLocaleDateString("pt-BR");
 
         const hoje = new Date();
-        const diasAtraso = Math.max(
-            0,
-            Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24))
-        );
+        const diasAtraso = Math.max(0, Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24)));
 
         let statusClasse = "status-vermelho";
         let statusTitle = "Em aberto";
@@ -144,7 +136,6 @@ async function preencherContratos(contratos) {
     }
 }
 
-
 // ===== EDITAR CONTATO =====
 function editarContato() {
     if (!clienteGlobal) {
@@ -155,11 +146,11 @@ function editarContato() {
     document.getElementById("editarTelefone").value = clienteGlobal.telefone || "";
     document.getElementById("editarEmail").value = clienteGlobal.email || "";
 
-    document.getElementById("popupEditarContato").style.display = "flex";
+    document.getElementById("popupEditarContato").classList.remove("hidden");
 }
 
 function fecharPopupEditar() {
-    document.getElementById("popupEditarContato").style.display = "none";
+    document.getElementById("popupEditarContato").classList.add("hidden");
 }
 
 async function salvarContatoEditado() {
@@ -172,8 +163,6 @@ async function salvarContatoEditado() {
     }
 
     try {
-        console.log("Payload enviado:", { telefone: novoNumero, email: novoEmail });
-
         const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -215,11 +204,11 @@ function abrirPopupEditarEndereco() {
     document.getElementById("editarCidade").value = e.cidade || "";
     document.getElementById("editarEstado").value = e.estado || "";
 
-    document.getElementById("popupEditarEndereco").style.display = "flex";
+    document.getElementById("popupEditarEndereco").classList.remove("hidden");
 }
 
 function fecharPopupEditarEndereco() {
-    document.getElementById("popupEditarEndereco").style.display = "none";
+    document.getElementById("popupEditarEndereco").classList.add("hidden");
 }
 
 async function salvarEnderecoEditado() {
@@ -240,13 +229,11 @@ async function salvarEnderecoEditado() {
     };
 
     try {
-        const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`,
-            {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(enderecoAtualizado),
-            }
-        );
+        const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(enderecoAtualizado),
+        });
 
         if (!resposta.ok) {
             alert("Erro ao atualizar endereço.");
@@ -268,9 +255,7 @@ async function salvarEnderecoEditado() {
 // ===== VERIFICAR ACORDO =====
 async function verificarAcordoAtivo(numeroContrato) {
     try {
-        const resposta = await fetch(
-            `${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`
-        );
+        const resposta = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`);
         if (!resposta.ok) return;
 
         const acordo = await resposta.json();
@@ -293,25 +278,41 @@ async function verificarAcordoAtivo(numeroContrato) {
     }
 }
 
+// ===== TEMA TOGGLE =====
 const toggleBtn = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme');
+const currentTheme = localStorage.getItem('theme');
 
-    if (currentTheme === 'dark') {
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+} else if (currentTheme === 'light') {
+    document.body.classList.remove('dark-mode');
+    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+} else {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.classList.add('dark-mode');
-        toggleBtn.textContent = '☀️';
-    } else if (currentTheme === 'light') {
-        document.body.classList.remove('dark-mode');
-        toggleBtn.textContent = '🌙';
-    } else {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-            toggleBtn.textContent = '☀️';
-        }
+        toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
     }
+}
 
-    toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        toggleBtn.textContent = isDark ? '☀️' : '🌙';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
+toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    toggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+// ===== RENDERIZAR RESUMO DO ACORDO =====
+function renderizarResumoAcordo(acordo) {
+    const resumoDiv = document.getElementById("resumoAcordo");
+    resumoDiv.innerHTML = `
+        <h3>Resumo do Acordo</h3>
+        <p><strong>Número do Contrato:</strong> ${acordo.numero_contrato}</p>
+        <p><strong>Status:</strong> ${acordo.status}</p>
+        <p><strong>Parcelamento:</strong></p>
+        <ul>
+            ${acordo.parcelamento ? acordo.parcelamento.map(parcela => `<li>Parcela ${parcela.numero}: R$ ${parcela.valor.toFixed(2).replace(".", ",")} - Vencimento: ${new Date(parcela.vencimento).toLocaleDateString("pt-BR")}</li>`).join("") : "<li>Nenhum parcelamento disponível.</li>"}
+        </ul>
+    `;
+    resumoDiv.classList.remove("hidden");
+}
