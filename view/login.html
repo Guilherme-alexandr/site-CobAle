@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-file-contract"></i> CobAle</h1>
+                <p>Faça login para acessar o sistema</p>
+            </div>
+            <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="login-container">
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+            <form id="loginForm">
+                <div class="campo">
+                    <label for="login"><i class="fas fa-user"></i> Login:</label>
+                    <input type="text" id="login" placeholder="Digite seu login" required>
+                </div>
+                <div class="campo">
+                    <label for="senha"><i class="fas fa-lock"></i> Senha:</label>
+                    <input type="password" id="senha" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" title="Entrar no sistema"><i class="fas fa-arrow-right"></i> Entrar</button>
+            </form>
+            <div id="mensagem" class="mensagem"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Sistema de Gestão de Contratos</p>
+    </footer>
+
+    <script src="../javascript/login.js"></script>
+</body>
+
+</html>

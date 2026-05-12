@@ -1,241 +1,262 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Negociação | CobAle</title>
-  <link rel="stylesheet" href="../css/negociacao.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negociação | CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/negociacao.css">
 </head>
 
 <body>
-  <header>
-    <div class="logo"><strong>CobAle</strong></div>
-    <h1>Negociação de Cliente</h1>
-    <div class="header-buttons">
-      <button id="theme-toggle" aria-label="Alternar tema">🌙</button>
-      <button class="botao-voltar" onclick="window.history.back()">Voltar</button>
-    </div>
-  </header>
-  </header>
-
-  <main>
-    <div class="coluna-esquerda">
-      <section id="info-cliente">
-        <h2>Informações do Cliente</h2>
-        <p><strong>Nome/Razão Social:</strong> <span id="nomeCliente"></span></p>
-        <p><strong>CPF/CNPJ:</strong> <span id="cpfCliente"></span></p>
-        <p><strong>Email:</strong> <span id="emailCliente"></span></p>
-      </section>
-
-      <section>
-        <h2>Dados</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Telefone</th>
-              <th>Email</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaContatos"></tbody>
-          <tr>
-            <td colspan="2">
-              <strong>Endereço:</strong>
-              <span id="enderecoCliente"></span>
-            </td>
-            <td>
-              <button onclick="abrirPopupEditarEndereco()">✏️ Editar</button>
-            </td>
-          </tr>
-        </table>
-      </section>
-
-      <div id="popupEditarContato" class="popup-editar" style="display: none;">
-        <div class="popup-content">
-          <h3>Editar Contato</h3>
-          <div class="campo-popup">
-            <label for="editarTelefone">Telefone:</label>
-            <input type="text" id="editarTelefone">
-          </div>
-          <div class="campo-popup">
-            <label for="editarEmail">Email:</label>
-            <input type="email" id="editarEmail">
-          </div>
-          <div class="botoes-popup">
-            <button onclick="salvarContatoEditado()">Salvar</button>
-            <button onclick="fecharPopupEditar()">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="popupEditarEndereco" class="popup-editar" style="display: none;">
-        <div class="popup-content">
-          <h3>Editar Endereço</h3>
-
-          <div class="campo-popup">
-            <label for="editarCep">CEP:</label>
-            <input type="text" id="editarCep" placeholder="Digite o CEP" onblur="buscarCep()">
-          </div>
-
-          <div class="campo-popup">
-            <label for="editarRua">Rua:</label>
-            <input type="text" id="editarRua">
-          </div>
-
-          <div class="campo-popup">
-            <label for="editarNumero">Número:</label>
-            <input type="text" id="editarNumero">
-          </div>
-
-          <div class="campo-popup">
-            <label for="editarCidade">Cidade:</label>
-            <input type="text" id="editarCidade">
-          </div>
-
-          <div class="campo-popup">
-            <label for="editarEstado">Estado:</label>
-            <input type="text" id="editarEstado">
-          </div>
-
-          <div class="botoes-popup">
-            <button class="btn-salvar" onclick="salvarEnderecoEditado()">Salvar</button>
-            <button class="btn-cancelar" onclick="fecharPopupEditarEndereco()">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <section>
-        <h2>Contratos</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Vencimento</th>
-              <th>Valor</th>
-              <th>Atraso</th>
-              <th>Status</th>
-              <th>Nº Contrato</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaContratos"></tbody>
-        </table>
-      </section>
-    </div>
-
-    <div class="coluna-direita">
-      <section>
-        <h2>Eventos e Ações</h2>
-        <p>Aqui aparecerão eventos relacionados ao cliente e o botão para cálculo do acordo.</p>
-
-        <button id="AbrirCalculadora" class="abrir-calculadora">Abrir Calculadora</button>
-
-        <div id="popupCalculadora" class="popup-calculadora" style="display: none;">
-          <div class="popup-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <div class="campo-popup">
-              <label><strong>Data de vencimento do acordo</strong></label>
-              <input type="date" id="dataVencimento">
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-handshake"></i> CobAle</h1>
+                <p>Negociação de Cliente</p>
             </div>
-            <button class="fechar-btn" onclick="fecharCalculadora()">Fechar</button>
-          </div>
+            <div class="header-actions">
+                <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i
+                        class="fas fa-moon"></i></button>
+                <button class="botao-voltar" onclick="window.history.back()" title="Voltar à página anterior"><i
+                        class="fas fa-arrow-left"></i> Voltar</button>
+            </div>
+        </div>
+    </header>
 
-          <hr>
+    <main>
+        <div class="coluna-esquerda">
+            <section id="info-cliente">
+                <h2><i class="fas fa-user"></i> Informações do Cliente</h2>
+                <p><strong>Nome/Razão Social:</strong> <span id="nomeCliente"></span></p>
+                <p><strong>CPF/CNPJ:</strong> <span id="cpfCliente"></span></p>
+                <p><strong>Email:</strong> <span id="emailCliente"></span></p>
+            </section>
 
-          <div class="calculadora-layout" style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <section>
+                <h2><i class="fas fa-address-book"></i> Dados</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-phone"></i> Telefone</th>
+                            <th><i class="fas fa-envelope"></i> Email</th>
+                            <th><i class="fas fa-cogs"></i> Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaContatos"></tbody>
+                    <tr>
+                        <td colspan="2">
+                            <strong><i class="fas fa-map-marker-alt"></i> Endereço:</strong>
+                            <span id="enderecoCliente"></span>
+                        </td>
+                        <td>
+                            <button onclick="abrirPopupEditarEndereco()" title="Editar endereço"><i
+                                    class="fas fa-edit"></i> Editar</button>
+                        </td>
+                    </tr>
+                </table>
+            </section>
 
-            <div class="coluna-esquerda" style="flex: 1; min-width: 300px;">
-              <div class="campo-popup">
-                <label><strong>Entrada (R$)</strong></label>
-                <input type="number" id="valorEntrada" placeholder="0,00">
-              </div>
-
-              <div class="campo-popup">
-                <label><strong>Parcelas</strong></label>
-                <input type="number" id="numeroParcelas" min="1" max="24" value="1">
-              </div>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th>Parcela</th>
-                    <th>Vencimento</th>
-                    <th>Valor</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaParcelas"></tbody>
-              </table>
+            <div id="popupEditarContato" class="popup-editar hidden">
+                <div class="popup-content">
+                    <h3><i class="fas fa-edit"></i> Editar Contato</h3>
+                    <div class="campo-popup">
+                        <label for="editarTelefone"><i class="fas fa-phone"></i> Telefone:</label>
+                        <input type="text" id="editarTelefone">
+                    </div>
+                    <div class="campo-popup">
+                        <label for="editarEmail"><i class="fas fa-envelope"></i> Email:</label>
+                        <input type="email" id="editarEmail">
+                    </div>
+                    <div class="botoes-popup">
+                        <button onclick="salvarContatoEditado()" title="Salvar alterações"><i class="fas fa-save"></i>
+                            Salvar</button>
+                        <button onclick="fecharPopupEditar()" title="Cancelar edição"><i class="fas fa-times"></i>
+                            Cancelar</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="coluna-direita" style="flex: 1; min-width: 250px;">
-              <div class="campo-popup">
-                <label><strong>Dias em atraso</strong></label>
-                <input type="text" id="campoDiasAtraso" readonly>
-              </div>
+            <div id="popupEditarEndereco" class="popup-editar hidden">
+                <div class="popup-content">
+                    <h3><i class="fas fa-edit"></i> Editar Endereço</h3>
 
-              <div class="campo-popup">
-                <label><strong>Valor total da dívida</strong></label>
-                <input type="text" id="campoValorComJuros" readonly>
-              </div>
+                    <div class="campo-popup">
+                        <label for="editarCep"><i class="fas fa-search"></i> CEP:</label>
+                        <input type="text" id="editarCep" placeholder="Digite o CEP" onblur="buscarCep()">
+                    </div>
 
-              <div class="campo-popup">
-                <label><strong>Desconto total</strong></label>
-                <input type="text" id="campoDesconto" readonly>
-              </div>
+                    <div class="campo-popup">
+                        <label for="editarRua"><i class="fas fa-road"></i> Rua:</label>
+                        <input type="text" id="editarRua">
+                    </div>
 
-              <div class="campo-popup">
-                <label><strong>Juros total</strong></label>
-                <input type="text" id="campoJuros" readonly>
-              </div>
+                    <div class="campo-popup">
+                        <label for="editarNumero"><i class="fas fa-hashtag"></i> Número:</label>
+                        <input type="text" id="editarNumero">
+                    </div>
 
-              <div class="campo-popup">
-                <label><strong>Valor final</strong></label>
-                <input type="text" id="campoValorFinal" readonly>
-              </div>
+                    <div class="campo-popup">
+                        <label for="editarCidade"><i class="fas fa-city"></i> Cidade:</label>
+                        <input type="text" id="editarCidade">
+                    </div>
+
+                    <div class="campo-popup">
+                        <label for="editarEstado"><i class="fas fa-flag"></i> Estado:</label>
+                        <input type="text" id="editarEstado">
+                    </div>
+
+                    <div class="botoes-popup">
+                        <button class="btn-salvar" onclick="salvarEnderecoEditado()" title="Salvar endereço"><i
+                                class="fas fa-save"></i> Salvar</button>
+                        <button class="btn-cancelar" onclick="fecharPopupEditarEndereco()" title="Cancelar edição"><i
+                                class="fas fa-times"></i> Cancelar</button>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="botoes-popup" style="text-align: right; margin-top: 15px;">
-            <button id="btnSalvarEdicao" style="display: none;" onclick="salvarAcordoEditado()">Salvar
-              Alterações</button>
-            <button id="btnFormalizar" onclick="formalizarAcordo()">Formalizar Acordo</button>
-          </div>
+            <section>
+                <h2><i class="fas fa-file-contract"></i> Contratos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> #</th>
+                            <th><i class="fas fa-calendar-alt"></i> Vencimento</th>
+                            <th><i class="fas fa-dollar-sign"></i> Valor</th>
+                            <th><i class="fas fa-clock"></i> Atraso</th>
+                            <th><i class="fas fa-info-circle"></i> Status</th>
+                            <th><i class="fas fa-file-signature"></i> Nº Contrato</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaContratos"></tbody>
+                </table>
+            </section>
         </div>
 
-        <div id="popupEditarAcordo" class="popup" style="display: none;">
-          <div class="popup-conteudo">
-            <h3>Editar Acordo</h3>
-            <label for="editarQtdParcelas">Quantidade de parcelas:</label>
-            <input type="number" id="editarQtdParcelas" min="1" />
+        <div class="coluna-direita">
+            <section>
+                <h2><i class="fas fa-tasks"></i> Eventos e Ações</h2>
+                <p>Aqui aparecerão eventos relacionados ao cliente e o botão para cálculo do acordo.</p>
 
-            <label for="editarValorEntrada">Valor de entrada (R$):</label>
-            <input type="number" id="editarValorEntrada" step="0.01" />
+                <button id="AbrirCalculadora" class="abrir-calculadora" title="Abrir calculadora de acordo"><i
+                        class="fas fa-calculator"></i> Abrir Calculadora</button>
 
-            <label for="editarVencimento">Vencimento:</label>
-            <input type="date" id="editarVencimento" />
+                <div id="popupCalculadora" class="popup-calculadora hidden">
+                    <div class="popup-header">
+                        <div class="campo-popup">
+                            <label><strong><i class="fas fa-calendar-check"></i> Data de vencimento do
+                                    acordo</strong></label>
+                            <input type="date" id="dataVencimento">
+                        </div>
+                        <button class="fechar-btn" onclick="fecharCalculadora()" title="Fechar calculadora"><i
+                                class="fas fa-times"></i></button>
+                    </div>
 
-            <div class="popup-botoes">
-              <button id="btnSalvarEdicao">Salvar</button>
-              <button onclick="fecharPopupEditarAcordo()">Cancelar</button>
-            </div>
-          </div>
+                    <hr>
+
+                    <div class="calculadora-layout">
+                        <div class="coluna-esquerda">
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-money-bill-wave"></i> Entrada (R$)</strong></label>
+                                <input type="number" id="valorEntrada" placeholder="0,00">
+                            </div>
+
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-list-ol"></i> Parcelas</strong></label>
+                                <input type="number" id="numeroParcelas" min="1" max="24" value="1">
+                            </div>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-hashtag"></i> Parcela</th>
+                                        <th><i class="fas fa-calendar-alt"></i> Vencimento</th>
+                                        <th><i class="fas fa-dollar-sign"></i> Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaParcelas"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="coluna-direita">
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-clock"></i> Dias em atraso</strong></label>
+                                <input type="text" id="campoDiasAtraso" readonly>
+                            </div>
+
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-calculator"></i> Valor total da dívida</strong></label>
+                                <input type="text" id="campoValorComJuros" readonly>
+                            </div>
+
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-percent"></i> Desconto total</strong></label>
+                                <input type="text" id="campoDesconto" readonly>
+                            </div>
+
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-chart-line"></i> Juros total</strong></label>
+                                <input type="text" id="campoJuros" readonly>
+                            </div>
+
+                            <div class="campo-popup">
+                                <label><strong><i class="fas fa-check-circle"></i> Valor final</strong></label>
+                                <input type="text" id="campoValorFinal" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="botoes-popup">
+                        <button id="btnSalvarEdicao" style="display: none;" onclick="salvarAcordoEditado()"
+                            title="Salvar alterações"><i class="fas fa-save"></i> Salvar Alterações</button>
+                        <button id="btnFormalizar" class="btnFormalizar" onclick="formalizarAcordo()"
+                            title="Formalizar acordo"><i class="fas fa-handshake"></i> Formalizar Acordo</button>
+                    </div>
+                </div>
+
+                <div id="popupEditarAcordo" class="popup hidden">
+                    <div class="popup-content">
+                        <h3><i class="fas fa-edit"></i> Editar Acordo</h3>
+                        <label for="editarQtdParcelas"><i class="fas fa-list-ol"></i> Quantidade de parcelas:</label>
+                        <input type="number" id="editarQtdParcelas" min="1" />
+
+                        <label for="editarValorEntrada"><i class="fas fa-money-bill-wave"></i> Valor de entrada
+                            (R$):</label>
+                        <input type="number" id="editarValorEntrada" step="0.01" />
+
+                        <label for="editarVencimento"><i class="fas fa-calendar-alt"></i> Vencimento:</label>
+                        <input type="date" id="editarVencimento" />
+
+                        <div class="popup-botoes">
+                            <button id="btnSalvarEdicaoPopup" title="Salvar edição"><i class="fas fa-save"></i>
+                                Salvar</button>
+                            <button onclick="fecharPopupEditarAcordo()" title="Cancelar edição"><i
+                                    class="fas fa-times"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="resultadoAcordo"></div>
+                
+                <div id="resumoAcordo" class="hidden resumo-acordo">
+                    <h3><i class="fas fa-file-signature"></i> Resumo do Acordo</h3>
+                    <div id="conteudoResumo"></div>
+                </div>
+
+            </section>
         </div>
-        <div id="resultadoAcordo"></div>
-      </section>
-    </div>
-  </main>
+    </main>
 
-  <footer>
-    <p>&copy; 2025 CobAle. Todos os direitos reservados.</p>
-  </footer>
-  <script>
-    const API_BASE = "https://cob-ale.onrender.com/";
-    //const API_BASE = "http://127.0.0.1:5000/";
-  </script>
-  <script src="../javascript/calculadora.js"></script>
-  <script src="../javascript/negociacao.js"></script>
+    <footer>
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Sistema de Cobrança e Acordos</p>
+    </footer>
 
-
-
+    <script>
+        const API_BASE = "https://cob-ale.onrender.com/";
+        //const API_BASE = "http://127.0.0.1:5000/";
+    </script>
+    <script src="../javascript/calculadora.js"></script>
+    <script src="../javascript/negociacao.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ===== Reset & Base ===== */
+:root {
+    --primary-color: #1e3a5f;
+    --secondary-color: #274b8a;
+    --accent-color: #1dd1a1;
+    --accent-hover: #10ac84;
+    --light-bg: #f5f6fa;
+    --dark-bg: #121212;
+    --text-light: #1e3a5f;
+    --text-dark: #e0e0e0;
+    --border-color: #d0d7de;
+    --shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,87 +22,173 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f5f6fa;
-    color: #1e3a5f;
+    background-color: var(--light-bg);
+    color: var(--text-light);
     transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-html, body {
-    height: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.6;
+    animation: fadeInPage 0.5s ease;
 }
 
-/* ===== Cabeçalho ===== */
+@keyframes fadeInPage {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ===== HEADER ===== */
 header {
-    background: linear-gradient(135deg, #1e3a5f, #274b8a);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    padding: 1.5rem 1rem;
+    padding: 2rem 1rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
     flex-wrap: wrap;
+    gap: 1rem;
 }
-.logo {
+
+.logo-section h1 {
     font-size: 2rem;
     font-weight: 700;
-}
-
-/* ===== Botões do Cabeçalho ===== */
-.header-buttons {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.5rem;
 }
 
-/* ===== Botão Voltar ===== */
+.logo-section p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .botao-voltar {
-    background-color: white;
-    color: #1e3a5f;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-.botao-voltar:hover {
-    background-color: rgba(255, 255, 255, 0.85);
-    transform: translateY(-1px);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-/* ===== Botão Tema ===== */
+.botao-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 #theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    color: white;
-    font-size: 1.3rem;
-    width: 2.3rem;
-    height: 2.3rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-left: 8px;
 }
+
 #theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     transform: scale(1.1);
 }
 
-/* ===== Layout Principal ===== */
+.botao-acao {
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    transition: 0.25s ease;
+    font-size: 0.95rem;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Formalizar (dourado) */
+.btn-formalizar {
+    background: linear-gradient(135deg, #c79b4b, #b58430);
+    color: white;
+}
+
+.btn-formalizar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 14px rgba(0,0,0,0.25);
+}
+
+/* Salvar Edição (azul) */
+.btn-salvar-edicao {
+    background: linear-gradient(135deg, #3a7bd5, #285ea8);
+    color: white;
+}
+
+.btn-salvar-edicao:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 14px rgba(0,0,0,0.25);
+}
+
+/* Animação ao aparecer */
+.fade-in {
+    animation: fadeIn 0.25s ease forwards;
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
 main {
     flex: 1;
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
     flex-wrap: wrap;
 }
 
@@ -103,80 +202,104 @@ main {
     min-width: 280px;
 }
 
-/* ===== Tabelas ===== */
-table, .tabela-acordo {
+/* ===== SEÇÕES ===== */
+section {
+    margin-bottom: 2rem;
+}
+
+section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ===== TABELAS ===== */
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     background-color: #fff;
-    display: table;
-    table-layout: auto;
-    white-space: nowrap;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    animation: slideIn 0.4s ease 0.2s both;
+    min-width: 600px;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 th, td {
-    padding: 10px;
+    padding: 1.2rem;
+    border-bottom: 1px solid #e0e0e0;
     text-align: left;
-    border-bottom: 1px solid #ddd;
-    min-width: 80px;
 }
 
 th {
-    background-color: #005fa3;
-    color: white;
+    background-color: var(--primary-color);
+    color: #fff;
     font-weight: 600;
-    position: sticky;
-    left: 0;
-    z-index: 1;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #e8f5e9;
+    transform: scale(1.01);
+    transition: var(--transition);
 }
 
-/* ===== Acordo Box ===== */
-.acordo-box {
-    border: 2px solid #0071c5;
-    background: #f3f8ff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 16px;
-}
-
-/* ===== Botões Gerais ===== */
-button {
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 8px 16px;
-    font-size: 14px;
+/* Botões em tabelas */
+td button {
     border: none;
-    transition: all 0.3s ease;
-    min-height: 44px;
-}
-
-.btn-acoes, .abrir-calculadora {
-    background-color: #0a84ff;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
     color: white;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #d68c3e;
+}
+.abrir-calculadora {
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #d68c3e;
 }
 
-.btn-acoes:hover, .abrir-calculadora:hover {
-    background-color: #006ad9;
-    transform: translateY(-1px);
-}
 
-/* ===== Popups ===== */
-.popup, .popup-editar, .popup-calculadora {
+/* ===== POPUPS ===== */
+.popup,
+.popup-editar,
+.popup-calculadora {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0,0,0,0.4);
-    display: flex;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -184,7 +307,16 @@ button {
     width: 100%;
 }
 
-.popup-content, .popup-editar .popup-content, .popup-calculadora {
+.popup:not(.hidden),
+.popup-editar:not(.hidden),
+.popup-calculadora:not(.hidden) {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.popup-content,
+.popup-editar .popup-content,
+.popup-calculadora {
     background-color: #ffffff;
     border-radius: 12px;
     width: 90%;
@@ -195,353 +327,302 @@ button {
     overflow-y: auto;
     box-sizing: border-box;
 }
+.btnFormalizar {
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #d68c3e;
 
-/* Campos dentro do popup */
+}
+.btn-acoes {
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #d68c3e;
+}
+.acordo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.btn-acoes {
+    background: linear-gradient(135deg, #d68c3e, #b8742f);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-acoes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 14px rgba(0,0,0,0.18);
+    background: linear-gradient(135deg, #e09742, #c07e34);
+}
+
+.btn-acoes .seta {
+    margin-left: 4px;
+    font-size: 0.8rem;
+}
+
+.menu-acoes {
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0.4rem 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+    z-index: 10;
+    min-width: 220px;
+    animation: dropdown 0.18s ease-out;
+}
+
+.menu-acoes.hidden {
+    display: none;
+}
+
+.menu-acoes button {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.acoes-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-acoes button i {
+    width: 20px;
+    text-align: center;
+}
+
+.menu-acoes button:hover {
+    background: #f3f3f3;
+    color: #000;
+}
+
+
+
+/* ===== BOTÃO FECHAR ===== */
+.fechar-popup,
+.fechar-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.fechar-popup:hover,
+.fechar-btn:hover {
+    color: #e74c3c;
+}
+
+/* ===== CONTEÚDO DO POPUP ===== */
+.popup-content h2,
+.popup-content h3 {
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-light);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
 .campo-popup {
     margin-bottom: 12px;
     display: flex;
     flex-direction: column;
 }
 
-.campo-popup label {
-    margin-bottom: 4px;
-    font-weight: 600;
-    color: #1e3a5f;
-}
-
-.campo-popup input, .campo-popup select {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-input[readonly] {
-    background-color: #ffffff;
-}
-
-/* Botões dentro dos popups */
-.botoes-popup {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.botoes-popup button {
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-    transition: all 0.3s ease;
-}
-.botoes-popup .btn-salvar, #btnFormalizar {
-    background-color: #0a84ff;
-    color: white;
-}
-.botoes-popup .btn-salvar:hover, #btnFormalizar:hover {
-    background-color: #006ad9;
-}
-.botoes-popup .btn-cancelar, .fechar-btn {
-    background-color: #ccc;
-    color: black;
-}
-.botoes-popup .btn-cancelar:hover, .fechar-btn:hover {
-    background-color: #999;
-}
-
-/* Layout calculadora */
-.popup-calculadora .calculadora-layout {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.popup-calculadora .coluna-esquerda,
-.popup-calculadora .coluna-direita {
-    flex: 1;
-    min-width: 250px;
-}
-
-.popup-calculadora table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.popup-calculadora th, .popup-calculadora td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.popup-calculadora th {
-    background-color: #005fa3;
-    color: white;
-}
-/* ===== Resumo do Acordo ===== */
-.acordo-box {
-    border: 2px solid #0071c5;
-    background: #f3f8ff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    max-width: 100%;
-    overflow-x: auto;
-}
-
-/* Menu de ações dentro do resumo */
-.acordo-box .acoes-wrapper {
-    position: relative;
-}
-
-.acordo-box .menu-acoes {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    z-index: 10;
-    min-width: 180px;
-    flex-direction: column;
-}
-
-.acordo-box .menu-acoes button {
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 8px 12px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 14px;
-    transition: background 0.2s ease;
-}
-
-.acordo-box .menu-acoes button:hover {
-    background-color: #0a84ff;
-    color: white;
-}
-
-/* Tabela de parcelas dentro do resumo */
-.acordo-box table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.acordo-box th, .acordo-box td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.acordo-box th {
-    background-color: #005fa3;
-    color: white;
-}
-
-
-/* ===== Footer ===== */
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #f0f2f5;
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.9rem;
-    color: #555;
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-}
-
-/* ===== Responsividade ===== */
-@media (max-width: 1024px) {
-    main { flex-direction: column; padding: 10px; gap: 15px; }
-    .coluna-esquerda, .coluna-direita { width: 100%; }
-}
-
-@media (max-width: 768px) {
-    header {
-        flex-wrap: wrap;
-        justify-content: center;
-        text-align: center;
-        padding: 10px;
+.campo-popup
+    label {
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: var(--text-light);
     }
-    .logo { font-size: 1.8rem; flex: 1 1 100%; }
-    header h1 { font-size: 1.4rem; flex: 1 1 100%; }
+.campo-popup input,
+.campo-popup select,
+.campo-popup textarea {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
-
-@media (max-width: 480px) {
-    #theme-toggle { top: 10px; right: 10px; width: 2.2rem; height: 2.2rem; font-size: 1.2rem; }
+.campo-popup input:focus,
+.campo-popup select:focus,
+.campo-popup textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
 }
-
-
-/* ===== Tema Escuro Unificado (igual página de pesquisa) ===== */
-body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
-}
-
-body.dark-mode header {
-    background: linear-gradient(135deg, #0d1b2a, #1b263b);
-    color: #f1f1f1;
-    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
-}
-
-body.dark-mode .botao-voltar,
-body.dark-mode .abrir-calculadora {
-    background-color: #3b82f6;
+.botao-submit {
+    background-color: var(--accent-color);
     color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 1rem;
+}
+.botao-submit:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+/* ===== RESPONSIVIDADE ===== */    
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    section h2 {
+        font-size: 1.2rem;
+    }
+
+    th, td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .botao-voltar,
+    #theme-toggle {
+        padding: 0.5rem;
+        font-size: 1rem;
+        width: 2rem;
+        height: 2rem;
+    }
 }
 
-body.dark-mode .botao-voltar:hover,
-body.dark-mode .abrir-calculadora:hover {
-    background-color: #2563eb;
+/* ===== MODO ESCURO ===== */
+body.dark-mode {
+    background-color: var(--dark-bg);
+    color: var(--text-dark);
 }
-
-body.dark-mode footer {
-    background-color: #0d1b2a;
-    color: #aaa;
+body.dark-mode header {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
 }
-
-/* ===== Inputs e Campos ===== */
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    color: #f1f1f1;
-    transition: all 0.3s ease;
-}
-
-body.dark-mode input::placeholder,
-body.dark-mode textarea::placeholder {
-    color: #888;
-}
-
-body.dark-mode input[readonly] {
-    background-color: #3b3b3b;
-    color: #f1f1f1;
-}
-
-body.dark-mode input:hover,
-body.dark-mode input:focus,
-body.dark-mode select:hover,
-body.dark-mode select:focus,
-body.dark-mode textarea:hover,
-body.dark-mode textarea:focus {
-    border-color: #10ac84;
-    outline: none;
-}
-
-/* ===== Tabelas ===== */
-body.dark-mode table,
-body.dark-mode .acordo-box table {
-    background-color: #1c1c1c;
-    color: #ddd;
-}
-
 body.dark-mode th {
-    background-color: #0d1b2a;
-    color: #f1f1f1;
+    background-color: var(--secondary-color);
 }
-
-body.dark-mode td {
-    border-bottom: 1px solid #333;
+body.dark-mode table {
+    background-color: #1e1e1e;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
-
+body.dark-mode tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
 body.dark-mode tr:hover {
-    background-color: #222;
+    background-color: #333333;
 }
-
-/* ===== Resumo de Acordo ===== */
-body.dark-mode .acordo-box {
-    background-color: #1c1c1c;
-    border: 2px solid #10ac84;
-    color: #e0e0e0;
-}
-
-body.dark-mode .acordo-box input,
-body.dark-mode .acordo-box select {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    color: #f1f1f1;
-}
-
-body.dark-mode .acordo-box input:hover,
-body.dark-mode .acordo-box input:focus,
-body.dark-mode .acordo-box select:hover,
-body.dark-mode .acordo-box select:focus {
-    border-color: #10ac84;
-    outline: none;
-}
-
-body.dark-mode .acordo-box .menu-acoes {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-}
-
-body.dark-mode .acordo-box .menu-acoes button {
-    color: #f1f1f1;
-}
-
-body.dark-mode .acordo-box .menu-acoes button:hover {
-    background-color: #10ac84;
-    color: #fff;
-}
-
-/* ===== Popups ===== */
 body.dark-mode .popup-content,
 body.dark-mode .popup-editar .popup-content,
 body.dark-mode .popup-calculadora {
-    background-color: #1c1c1c;
-    color: #e0e0e0;
+    background-color: #2a2a2a;
+    color: var(--text-dark);
 }
-
-body.dark-mode .popup-content label,
 body.dark-mode .campo-popup label {
-    color: #f1f1f1;
+    color: var(--text-dark);
+}
+body.dark-mode .campo-popup input,
+body.dark-mode .campo-popup select,
+body.dark-mode .campo-popup textarea {
+    background-color: #3a3a3a;
+    border: 1px solid #555555;
+    color: var(--text-dark);
+}
+body.dark-mode .campo-popup input:focus,
+body.dark-mode .campo-popup select:focus,
+body.dark-mode .campo-popup textarea:focus {
+    border-color: var(--accent-color);
+}
+body.dark-mode .botao-submit {
+    background-color: var(--accent-color);
+}
+body.dark-mode .botao-submit:hover {
+    background-color: var(--accent-hover);
 }
 
-body.dark-mode .botoes-popup .btn-salvar,
-body.dark-mode #btnFormalizar {
-    background-color: #10ac84;
-    color: white;
+/* ===== ANIMAÇÕES ADICIONAIS ===== */
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
-
-body.dark-mode .botoes-popup .btn-salvar:hover,
-body.dark-mode #btnFormalizar:hover {
-    background-color: #0b8b6a;
+.popup-content,
+.popup-editar .popup-content,
+.popup-calculadora {
+    animation: popIn 0.3s ease;
 }
-
-body.dark-mode .botoes-popup .btn-cancelar,
-body.dark-mode .fechar-btn {
-    background-color: #555;
-    color: #eee;
+@keyframes dropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
-body.dark-mode .botoes-popup .btn-cancelar:hover,
-body.dark-mode .fechar-btn:hover {
-    background-color: #444;
-}
-
-/* ===== Calculadora ===== */
-body.dark-mode .popup-calculadora th {
-    background-color: #0d1b2a;
-    color: #f1f1f1;
-}
-
-body.dark-mode .popup-calculadora td {
-    border-color: #333;
-}
-

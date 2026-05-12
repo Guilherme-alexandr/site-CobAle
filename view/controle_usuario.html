@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle de Usuários - CobAle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/controle_usuarios.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-users-cog"></i> Controle de Usuários</h1>
+                <p>Gerencie os usuários do sistema</p>
+            </div>
+            <div class="header-actions">
+                <button id="btnCriar" class="header-btn criar" title="Criar novo usuário"><i class="fas fa-plus"></i> Criar Usuário</button>
+                <button id="importarBtn" class="header-btn criar" title="Importar usuários"><i class="fas fa-upload"></i> Importar</button>
+                <button id="btnVoltar" class="header-btn voltar" title="Voltar à página anterior"><i class="fas fa-arrow-left"></i> Voltar</button>
+            </div>
+            <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <div id="statusFeedback" class="status-feedback hidden">
+        <p id="feedbackMessage"></p>
+    </div>
+
+    <main class="container">
+        <!-- FILTROS -->
+        <section class="filtros-usuarios">
+            <div class="campo">
+                <label for="pesquisaNome"><i class="fas fa-search"></i> Pesquisar por nome:</label>
+                <input type="text" id="pesquisaNome" placeholder="Digite o nome do usuário..." />
+            </div>
+
+            <div class="campo">
+                <label for="filtroCargo"><i class="fas fa-filter"></i> Filtrar por cargo:</label>
+                <select id="filtroCargo">
+                    <option value="">Todos</option>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+            </div>
+
+            <button id="btnLimparFiltros" class="btn-filtro" title="Limpar todos os filtros"><i class="fas fa-broom"></i> Limpar Filtros</button>
+        </section>
+
+        <!-- TABELA DE USUÁRIOS -->
+        <section class="tabela-container">
+            <table id="tabelaUsuarios">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-user"></i> Nome</th>
+                        <th><i class="fas fa-sign-in-alt"></i> Login</th>
+                        <th><i class="fas fa-lock"></i> Senha</th>
+                        <th><i class="fas fa-briefcase"></i> Cargo</th>
+                        <th><i class="fas fa-cogs"></i> Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados inseridos dinamicamente -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- POPUP DE EDIÇÃO -->
+    <div id="popupEdicao" class="popup hidden">
+        <div class="popup-content">
+            <h2><i class="fas fa-edit"></i> Editar Usuário</h2>
+            <form id="formEdicao">
+                <label for="editNome"><i class="fas fa-user"></i> Nome</label>
+                <input type="text" id="editNome" required />
+
+                <label for="editLogin"><i class="fas fa-sign-in-alt"></i> Login</label>
+                <input type="text" id="editLogin" required />
+
+                <label for="editSenha"><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="editSenha" placeholder="Deixe em branco para não alterar" />
+
+                <label for="editCargo"><i class="fas fa-briefcase"></i> Cargo</label>
+                <select id="editCargo" required>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+
+                <div class="popup-actions">
+                    <button type="submit" class="salvar" title="Salvar alterações"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="button" id="btnExcluir" class="excluir" title="Excluir usuário"><i class="fas fa-trash"></i> Excluir</button>
+                    <button type="button" id="btnCancelar" class="cancelar" title="Cancelar edição"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP DE CRIAÇÃO -->
+    <div id="popupCriar" class="popup hidden">
+        <div class="popup-content">
+            <h2><i class="fas fa-user-plus"></i> Novo Usuário</h2>
+            <form id="formCriar">
+                <label for="novoNome"><i class="fas fa-user"></i> Nome</label>
+                <input type="text" id="novoNome" required />
+
+                <label for="novoLogin"><i class="fas fa-sign-in-alt"></i> Login</label>
+                <input type="text" id="novoLogin" required />
+
+                <label for="novaSenha"><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="novaSenha" required />
+
+                <label for="novoCargo"><i class="fas fa-briefcase"></i> Cargo</label>
+                <select id="novoCargo" required>
+                    <option value="operador">Operador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+
+                <div class="popup-actions">
+                    <button type="submit" class="salvar" title="Criar usuário"><i class="fas fa-plus"></i> Criar</button>
+                    <button type="button" id="btnCancelarCriar" class="cancelar" title="Cancelar criação"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP DE IMPORTAÇÃO -->
+    <div class="popup hidden" id="popupImportar">
+    <div class="popup-content">
+        <button class="fechar-popup" onclick="fecharPopup('popupImportar')" title="Fechar popup">&times;</button>
+        <h2><i class="fas fa-upload"></i> Importar Arquivos</h2>
+
+        <form id="form-importar">
+            <label for="tipo_importacao"><i class="fas fa-list"></i> Tipo de Importação:</label>
+            <select id="tipo_importacao" name="tipo_importacao" required>
+                <option value="">Selecione</option>
+                <option value="usuarios">Usuários</option>
+            </select>
+
+            <div class="popup-actions">
+                <button type="submit" class="salvar"><i class="fas fa-upload"></i> Importar</button>
+                <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <footer>
+        <p><i class="fas fa-copyright"></i> 2025 CobAle — Painel Administrativo</p>
+    </footer>
+
+    <script src="../javascript/controle_usuarios.js"></script>
+</body>
+
+</html>

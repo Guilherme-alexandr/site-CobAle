@@ -1,4 +1,5 @@
 let clienteGlobal = null;
+let enderecoId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
@@ -24,33 +25,46 @@ async function buscarClientePorCpf(cpf) {
         const response = await fetch(`${API_BASE}/clientes/buscar_por_cpf/${cpf}`);
         if (!response.ok) throw new Error("Erro ao buscar cliente.");
 
-        const cliente = await response.json();
+        const clientes = await response.json();
+
+        if (!clientes || clientes.length === 0) {
+            throw new Error("Nenhum cliente encontrado para este CPF.");
+        }
+
+        const cliente = clientes[0];
+        console.log("Cliente retornado da API:", cliente);
+
         preencherInfoCliente(cliente);
-        buscarContratos(cliente.id);
+
+        if (cliente.id) {
+            await buscarContratos(cliente.id);
+        } else {
+            console.error("Cliente sem ID válido:", cliente);
+            alert("Cliente encontrado, mas sem ID válido.");
+        }
     } catch (error) {
-        console.error(error);
+        console.error("Erro ao buscar cliente:", error);
         alert("Erro ao buscar dados do cliente.");
     }
 }
 
-// ===== PREENCHER CLIENTE (dados + endereço) =====
+//  PREENCHER CLIENTE
 function preencherInfoCliente(cliente) {
     console.log("Cliente recebido:", cliente);
     clienteGlobal = cliente;
 
     document.getElementById("nomeCliente").textContent = cliente.nome;
     document.getElementById("cpfCliente").textContent = cliente.cpf;
-    document.getElementById("emailCliente").textContent =
-        cliente.email || "Não informado";
+    document.getElementById("emailCliente").textContent = cliente.email || "Não informado";
 
     const contatosBody = document.getElementById("tabelaContatos");
     contatosBody.innerHTML = `
-    <tr>
-      <td>${cliente.telefone || "Sem telefone"}</td>
-      <td>${cliente.email || "Sem email"}</td>
-      <td><button class="btn-editar" onclick="editarContato()">✏️ Editar</button></td>
-    </tr>
-  `;
+        <tr>
+            <td>${cliente.telefone || "Sem telefone"}</td>
+            <td>${cliente.email || "Sem email"}</td>
+            <td><button class="btn-editar" onclick="editarContato()" title="Editar contato"><i class="fas fa-edit"></i> Editar</button></td>
+        </tr>
+    `;
 
     const enderecoSpan = document.getElementById("enderecoCliente");
     if (cliente.enderecos && cliente.enderecos.length > 0) {
@@ -64,13 +78,11 @@ function preencherInfoCliente(cliente) {
 // ===== BUSCA CONTRATOS =====
 async function buscarContratos(clienteId) {
     try {
-        const response = await fetch(
-            `${API_BASE}/contratos/buscar_por_cliente/${clienteId}`
-        );
+        const response = await fetch(`${API_BASE}/contratos/buscar_por_cliente/${clienteId}`);
 
         if (!response.ok) throw new Error("Erro ao buscar contratos.");
         const contratos = await response.json();
-        await preencherContratos(contratos); // AGORA É async
+        await preencherContratos(contratos);
     } catch (error) {
         console.error(error);
         alert("Erro ao buscar contratos do cliente.");
@@ -88,12 +100,8 @@ async function preencherContratos(contratos) {
         const vencimentoFormatado = vencimentoDate.toLocaleDateString("pt-BR");
 
         const hoje = new Date();
-        const diasAtraso = Math.max(
-            0,
-            Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24))
-        );
+        const diasAtraso = Math.max(0, Math.floor((hoje - vencimentoDate) / (1000 * 60 * 60 * 24)));
 
-        // Definir status visual (padrão: em aberto = vermelho)
         let statusClasse = "status-vermelho";
         let statusTitle = "Em aberto";
 
@@ -128,7 +136,6 @@ async function preencherContratos(contratos) {
     }
 }
 
-
 // ===== EDITAR CONTATO =====
 function editarContato() {
     if (!clienteGlobal) {
@@ -139,11 +146,11 @@ function editarContato() {
     document.getElementById("editarTelefone").value = clienteGlobal.telefone || "";
     document.getElementById("editarEmail").value = clienteGlobal.email || "";
 
-    document.getElementById("popupEditarContato").style.display = "flex";
+    document.getElementById("popupEditarContato").classList.remove("hidden");
 }
 
 function fecharPopupEditar() {
-    document.getElementById("popupEditarContato").style.display = "none";
+    document.getElementById("popupEditarContato").classList.add("hidden");
 }
 
 async function salvarContatoEditado() {
@@ -156,8 +163,6 @@ async function salvarContatoEditado() {
     }
 
     try {
-        console.log("Payload enviado:", { telefone: novoNumero, email: novoEmail });
-
         const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -199,11 +204,11 @@ function abrirPopupEditarEndereco() {
     document.getElementById("editarCidade").value = e.cidade || "";
     document.getElementById("editarEstado").value = e.estado || "";
 
-    document.getElementById("popupEditarEndereco").style.display = "flex";
+    document.getElementById("popupEditarEndereco").classList.remove("hidden");
 }
 
 function fecharPopupEditarEndereco() {
-    document.getElementById("popupEditarEndereco").style.display = "none";
+    document.getElementById("popupEditarEndereco").classList.add("hidden");
 }
 
 async function salvarEnderecoEditado() {
@@ -224,13 +229,11 @@ async function salvarEnderecoEditado() {
     };
 
     try {
-        const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`,
-            {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(enderecoAtualizado),
-            }
-        );
+        const resposta = await fetch(`${API_BASE}/clientes/${clienteGlobal.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(enderecoAtualizado),
+        });
 
         if (!resposta.ok) {
             alert("Erro ao atualizar endereço.");
@@ -252,9 +255,7 @@ async function salvarEnderecoEditado() {
 // ===== VERIFICAR ACORDO =====
 async function verificarAcordoAtivo(numeroContrato) {
     try {
-        const resposta = await fetch(
-            `${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`
-        );
+        const resposta = await fetch(`${API_BASE}/acordos/buscar_por_contrato/${numeroContrato}`);
         if (!resposta.ok) return;
 
         const acordo = await resposta.json();
@@ -277,25 +278,27 @@ async function verificarAcordoAtivo(numeroContrato) {
     }
 }
 
+// ===== TEMA TOGGLE =====
 const toggleBtn = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme');
+const currentTheme = localStorage.getItem('theme');
 
-    if (currentTheme === 'dark') {
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+} else if (currentTheme === 'light') {
+    document.body.classList.remove('dark-mode');
+    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+} else {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.classList.add('dark-mode');
-        toggleBtn.textContent = '☀️';
-    } else if (currentTheme === 'light') {
-        document.body.classList.remove('dark-mode');
-        toggleBtn.textContent = '🌙';
-    } else {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-            toggleBtn.textContent = '☀️';
-        }
+        toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
     }
+}
 
-    toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        toggleBtn.textContent = isDark ? '☀️' : '🌙';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
+toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    toggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
