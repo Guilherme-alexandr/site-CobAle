@@ -17,8 +17,10 @@
                 <p>Negociação de Cliente</p>
             </div>
             <div class="header-actions">
-                <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i class="fas fa-moon"></i></button>
-                <button class="botao-voltar" onclick="window.history.back()" title="Voltar à página anterior"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button id="theme-toggle" aria-label="Alternar tema" title="Alternar para modo escuro"><i
+                        class="fas fa-moon"></i></button>
+                <button class="botao-voltar" onclick="window.history.back()" title="Voltar à página anterior"><i
+                        class="fas fa-arrow-left"></i> Voltar</button>
             </div>
         </div>
     </header>
@@ -49,7 +51,8 @@
                             <span id="enderecoCliente"></span>
                         </td>
                         <td>
-                            <button onclick="abrirPopupEditarEndereco()" title="Editar endereço"><i class="fas fa-edit"></i> Editar</button>
+                            <button onclick="abrirPopupEditarEndereco()" title="Editar endereço"><i
+                                    class="fas fa-edit"></i> Editar</button>
                         </td>
                     </tr>
                 </table>
@@ -67,8 +70,10 @@
                         <input type="email" id="editarEmail">
                     </div>
                     <div class="botoes-popup">
-                        <button onclick="salvarContatoEditado()" title="Salvar alterações"><i class="fas fa-save"></i> Salvar</button>
-                        <button onclick="fecharPopupEditar()" title="Cancelar edição"><i class="fas fa-times"></i> Cancelar</button>
+                        <button onclick="salvarContatoEditado()" title="Salvar alterações"><i class="fas fa-save"></i>
+                            Salvar</button>
+                        <button onclick="fecharPopupEditar()" title="Cancelar edição"><i class="fas fa-times"></i>
+                            Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -103,8 +108,10 @@
                     </div>
 
                     <div class="botoes-popup">
-                        <button class="btn-salvar" onclick="salvarEnderecoEditado()" title="Salvar endereço"><i class="fas fa-save"></i> Salvar</button>
-                        <button class="btn-cancelar" onclick="fecharPopupEditarEndereco()" title="Cancelar edição"><i class="fas fa-times"></i> Cancelar</button>
+                        <button class="btn-salvar" onclick="salvarEnderecoEditado()" title="Salvar endereço"><i
+                                class="fas fa-save"></i> Salvar</button>
+                        <button class="btn-cancelar" onclick="fecharPopupEditarEndereco()" title="Cancelar edição"><i
+                                class="fas fa-times"></i> Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -132,15 +139,18 @@
                 <h2><i class="fas fa-tasks"></i> Eventos e Ações</h2>
                 <p>Aqui aparecerão eventos relacionados ao cliente e o botão para cálculo do acordo.</p>
 
-                <button id="AbrirCalculadora" class="abrir-calculadora" title="Abrir calculadora de acordo"><i class="fas fa-calculator"></i> Abrir Calculadora</button>
+                <button id="AbrirCalculadora" class="abrir-calculadora" title="Abrir calculadora de acordo"><i
+                        class="fas fa-calculator"></i> Abrir Calculadora</button>
 
                 <div id="popupCalculadora" class="popup-calculadora hidden">
                     <div class="popup-header">
                         <div class="campo-popup">
-                            <label><strong><i class="fas fa-calendar-check"></i> Data de vencimento do acordo</strong></label>
+                            <label><strong><i class="fas fa-calendar-check"></i> Data de vencimento do
+                                    acordo</strong></label>
                             <input type="date" id="dataVencimento">
                         </div>
-                        <button class="fechar-btn" onclick="fecharCalculadora()" title="Fechar calculadora"><i class="fas fa-times"></i></button>
+                        <button class="fechar-btn" onclick="fecharCalculadora()" title="Fechar calculadora"><i
+                                class="fas fa-times"></i></button>
                     </div>
 
                     <hr>
@@ -198,8 +208,10 @@
                     </div>
 
                     <div class="botoes-popup">
-                        <button id="btnSalvarEdicao" style="display: none;" onclick="salvarAcordoEditado()" title="Salvar alterações"><i class="fas fa-save"></i> Salvar Alterações</button>
-                        <button id="btnFormalizar" onclick="formalizarAcordo()" title="Formalizar acordo"><i class="fas fa-handshake"></i> Formalizar Acordo</button>
+                        <button id="btnSalvarEdicao" style="display: none;" onclick="salvarAcordoEditado()"
+                            title="Salvar alterações"><i class="fas fa-save"></i> Salvar Alterações</button>
+                        <button id="btnFormalizar" class="btnFormalizar" onclick="formalizarAcordo()"
+                            title="Formalizar acordo"><i class="fas fa-handshake"></i> Formalizar Acordo</button>
                     </div>
                 </div>
 
@@ -209,19 +221,28 @@
                         <label for="editarQtdParcelas"><i class="fas fa-list-ol"></i> Quantidade de parcelas:</label>
                         <input type="number" id="editarQtdParcelas" min="1" />
 
-                        <label for="editarValorEntrada"><i class="fas fa-money-bill-wave"></i> Valor de entrada (R$):</label>
+                        <label for="editarValorEntrada"><i class="fas fa-money-bill-wave"></i> Valor de entrada
+                            (R$):</label>
                         <input type="number" id="editarValorEntrada" step="0.01" />
 
                         <label for="editarVencimento"><i class="fas fa-calendar-alt"></i> Vencimento:</label>
                         <input type="date" id="editarVencimento" />
 
                         <div class="popup-botoes">
-                            <button id="btnSalvarEdicao" title="Salvar edição"><i class="fas fa-save"></i> Salvar</button>
-                            <button onclick="fecharPopupEditarAcordo()" title="Cancelar edição"><i class="fas fa-times"></i> Cancelar</button>
+                            <button id="btnSalvarEdicaoPopup" title="Salvar edição"><i class="fas fa-save"></i>
+                                Salvar</button>
+                            <button onclick="fecharPopupEditarAcordo()" title="Cancelar edição"><i
+                                    class="fas fa-times"></i> Cancelar</button>
                         </div>
                     </div>
                 </div>
                 <div id="resultadoAcordo"></div>
+                
+                <div id="resumoAcordo" class="hidden resumo-acordo">
+                    <h3><i class="fas fa-file-signature"></i> Resumo do Acordo</h3>
+                    <div id="conteudoResumo"></div>
+                </div>
+
             </section>
         </div>
     </main>
@@ -231,8 +252,8 @@
     </footer>
 
     <script>
-        //const API_BASE = "https://cob-ale.onrender.com/";
-        const API_BASE = "http://127.0.0.1:5000/";
+        const API_BASE = "https://cob-ale.onrender.com/";
+        //const API_BASE = "http://127.0.0.1:5000/";
     </script>
     <script src="../javascript/calculadora.js"></script>
     <script src="../javascript/negociacao.js"></script>

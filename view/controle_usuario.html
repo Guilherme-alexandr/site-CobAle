@@ -130,26 +130,25 @@
 
     <!-- POPUP DE IMPORTAÇÃO -->
     <div class="popup hidden" id="popupImportar">
-        <div class="popup-content">
-            <button class="fechar-popup" onclick="fecharPopup('popupImportar')" title="Fechar popup">&times;</button>
-            <h2><i class="fas fa-upload"></i> Importar Arquivos</h2>
-            <form id="form-importar">
-                <label for="tipo_importacao"><i class="fas fa-list"></i> Tipo de Importação:</label>
-                <select id="tipo_importacao" name="tipo_importacao" required>
-                    <option value="">Selecione</option>
-                    <option value="usuarios">Usuários</option>
-                </select>
+    <div class="popup-content">
+        <button class="fechar-popup" onclick="fecharPopup('popupImportar')" title="Fechar popup">&times;</button>
+        <h2><i class="fas fa-upload"></i> Importar Arquivos</h2>
 
-                <label for="arquivo"><i class="fas fa-file-upload"></i> Arquivo:</label>
-                <input type="file" id="arquivo" name="arquivo" accept=".csv,.xlsx" required>
+        <form id="form-importar">
+            <label for="tipo_importacao"><i class="fas fa-list"></i> Tipo de Importação:</label>
+            <select id="tipo_importacao" name="tipo_importacao" required>
+                <option value="">Selecione</option>
+                <option value="usuarios">Usuários</option>
+            </select>
 
-                <div class="popup-actions">
-                    <button type="submit" class="salvar" title="Importar arquivo"><i class="fas fa-upload"></i> Importar</button>
-                    <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')" title="Cancelar importação"><i class="fas fa-times"></i> Cancelar</button>
-                </div>
-            </form>
-        </div>
+            <div class="popup-actions">
+                <button type="submit" class="salvar"><i class="fas fa-upload"></i> Importar</button>
+                <button type="button" class="cancelar" onclick="fecharPopup('popupImportar')"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+        </form>
     </div>
+</div>
+
 
     <footer>
         <p><i class="fas fa-copyright"></i> 2025 CobAle — Painel Administrativo</p>

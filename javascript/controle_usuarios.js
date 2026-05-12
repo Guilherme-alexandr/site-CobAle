@@ -1,5 +1,5 @@
-//const API_BASE = "https://cob-ale.onrender.com/";
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "https://cob-ale.onrender.com/";
+//const API_BASE = "http://127.0.0.1:5000";
 
 
 const tabelaBody = document.querySelector("#tabelaUsuarios tbody");
@@ -178,36 +178,36 @@ document.getElementById("form-importar").addEventListener("submit", function(e) 
     e.preventDefault();
 
     const tipoImportacao = document.getElementById("tipo_importacao").value;
-    const arquivo = document.getElementById("arquivo").files[0];
 
-    if (!tipoImportacao || !arquivo) {
-        exibirFeedback("erro", "Por favor, selecione o tipo de importação e o arquivo.");
+    if (!tipoImportacao) {
+        exibirFeedback("erro", "Por favor, selecione o tipo de importação.");
         return;
     }
 
-    const dadosImportacao = new FormData();
-    dadosImportacao.append('tipo_importacao', tipoImportacao);
-    dadosImportacao.append('arquivo', arquivo);
-
-    fetch(`${API_BASE}/importar-exemplo-usuarios`, {
-        method: 'GET',
-        body: dadosImportacao,
+    fetch(`${API_BASE}/importar-exemplo-usuarios?tipo_importacao=${tipoImportacao}`, {
+        method: 'GET'
     })
     .then(response => response.json())
     .then(data => {
-        if (data.sucesso) {
-            exibirFeedback("sucesso", `${data.usuariosImportados} usuários importados com sucesso.`);
-            exibirResultadoImportacao(data.resultados);
-        } else {
-            exibirFeedback("erro", "Erro ao importar os usuários.");
+        if (data.mensagem) {
+            exibirFeedback("sucesso", data.mensagem);
+        } else if (data.erro) {
+            exibirFeedback("erro", data.erro);
         }
+        if (data.resultados) {
+            exibirResultadoImportacao(data.resultados);
+        }
+        carregarUsuarios();
     })
     .catch(error => {
-        exibirFeedback("erro", "Erro ao enviar o arquivo.");
+        console.error('Erro na importação:', error);
+        exibirFeedback("erro", "Ocorreu um erro durante a importação.");
     });
 
     fecharPopup('popupImportar');
 });
+
+
 
 function exibirFeedback(tipo, mensagem) {
     const statusFeedback = document.getElementById('statusFeedback');

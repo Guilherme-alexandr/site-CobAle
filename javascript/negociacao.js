@@ -1,5 +1,5 @@
 let clienteGlobal = null;
-let enderecoId = null; // Adicionado para armazenar o ID do endereço
+let enderecoId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
@@ -48,7 +48,7 @@ async function buscarClientePorCpf(cpf) {
     }
 }
 
-// ===== PREENCHER CLIENTE (dados + endereço) =====
+//  PREENCHER CLIENTE
 function preencherInfoCliente(cliente) {
     console.log("Cliente recebido:", cliente);
     clienteGlobal = cliente;
@@ -302,17 +302,3 @@ toggleBtn.addEventListener('click', () => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
 
-// ===== RENDERIZAR RESUMO DO ACORDO =====
-function renderizarResumoAcordo(acordo) {
-    const resumoDiv = document.getElementById("resumoAcordo");
-    resumoDiv.innerHTML = `
-        <h3>Resumo do Acordo</h3>
-        <p><strong>Número do Contrato:</strong> ${acordo.numero_contrato}</p>
-        <p><strong>Status:</strong> ${acordo.status}</p>
-        <p><strong>Parcelamento:</strong></p>
-        <ul>
-            ${acordo.parcelamento ? acordo.parcelamento.map(parcela => `<li>Parcela ${parcela.numero}: R$ ${parcela.valor.toFixed(2).replace(".", ",")} - Vencimento: ${new Date(parcela.vencimento).toLocaleDateString("pt-BR")}</li>`).join("") : "<li>Nenhum parcelamento disponível.</li>"}
-        </ul>
-    `;
-    resumoDiv.classList.remove("hidden");
-}

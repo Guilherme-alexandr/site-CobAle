@@ -103,7 +103,7 @@ header {
 
 /* ===== FORM ===== */
 form#formPesquisa {
-    background: #202322;
+    background: #1e3a5f;
     padding: 2rem;
     border-radius: 16px;
     box-shadow: var(--shadow);
@@ -399,6 +399,10 @@ body.dark-mode {
 
 body.dark-mode header {
     background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+body.dark-mode form#formPesquisa {
+    background: #2c2c2c;
 }
 
 body.dark-mode .form-section,
