@@ -31,6 +31,8 @@
       margin-bottom: 16px;
       gap: 12px;
       flex-wrap: wrap;
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px;
     }
 
     .logo {
@@ -38,7 +40,7 @@
       color: white;
       font-weight: 700;
       padding: 8px 16px;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       user-select: none;
       white-space: nowrap;
       flex-shrink: 0;
@@ -46,8 +48,9 @@
     }
 
     .boleto-title {
-      font-style: italic;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;
     }
 
     .instructions {
@@ -55,60 +58,67 @@
       font-size: 0.9rem;
     }
 
-    .instructions strong {
-      font-weight: 700;
-    }
-
     .instructions .line-editable {
       font-family: monospace;
+      font-weight: 700;
+      font-size: 1.05rem;
       user-select: text;
       word-break: break-all;
-      white-space: nowrap;
-      overflow-x: auto;
+      background-color: #f4f4f4;
+      padding: 4px 8px;
+      border-radius: 4px;
       display: inline-block;
-      max-width: 60vw;
-      vertical-align: middle;
-      margin-left: 12px;
+      margin-top: 4px;
     }
 
     .cut-line {
       text-align: center;
-      margin: 16px 0;
+      margin: 20px 0;
       font-size: 0.75rem;
       letter-spacing: 2px;
       user-select: none;
+      position: relative;
     }
 
     .cut-line span {
-      border-bottom: 1px dashed #444;
-      padding-bottom: 2px;
+      background: #fff;
+      padding: 0 10px;
+      position: relative;
+      z-index: 2;
       font-weight: bold;
+    }
+
+    .cut-line::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      border-bottom: 1px dashed #444;
+      z-index: 1;
     }
 
     .boleto-box {
       border: 2px solid black;
       border-radius: 2px;
-      overflow-x: auto;
       font-size: 0.85rem;
       font-weight: 400;
       margin-bottom: 14px;
-      user-select: none;
     }
 
     table.boleto-table {
       width: 100%;
       border-collapse: collapse;
-      border-spacing: 0;
-      border: none;
+      table-layout: fixed; /* Força o alinhamento perfeito das colunas */
     }
 
     .boleto-table td,
     .boleto-table th {
       border: 1px solid black;
-      padding: 4px 8px;
+      padding: 6px 8px;
       vertical-align: top;
       font-size: 0.8rem;
-      font-weight: 400;
+      word-wrap: break-word;
     }
 
     .boleto-table th {
@@ -117,14 +127,18 @@
       background-color: #f0f0f0;
     }
 
-    .boleto-table strong {
+    .boleto-table label {
+      display: block;
+      font-size: 0.65rem;
       font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 2px;
     }
 
-    .boleto-header td {
-      font-weight: 700;
-      text-align: center;
-      background: white;
+    .boleto-header th {
+      font-size: 1.1rem;
+      padding: 8px;
     }
 
     .right-align-bold {
@@ -133,101 +147,66 @@
     }
 
     .demonstrativo {
-      border: 1px solid black;
-      padding: 6px 8px;
+      border-top: 1px solid black;
+      padding: 10px 8px;
       font-size: 0.85rem;
-      font-weight: 700;
-      white-space: pre-wrap;
       user-select: text;
       background: #f8f8f8;
+      min-height: 60px;
     }
 
     .small-text {
-      font-size: 0.7rem;
-      font-weight: 400;
-      user-select: text;
-      color: #333;
-      line-height: 1.2;
+      font-size: 0.75rem;
+      color: #222;
+      line-height: 1.3;
     }
 
     .auth-text {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-align: right;
       user-select: none;
-      margin-top: 4px;
-      margin-bottom: 8px;
+      padding: 4px 8px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #555;
     }
 
     .barcode-container {
-      margin: 12px 0 24px;
+      margin: 15px 0;
       user-select: none;
-      overflow-x: auto;
     }
 
-    .barcode {
-      height: 64px;
-      width: 100%;
-      max-width: 400px;
-      background: repeating-linear-gradient(to right,
-          black 0,
-          black 2px,
-          white 2px,
-          white 4px);
-      box-shadow:
-        inset 0 0 2px #111;
-      border-radius: 3px;
+    .barcode-container img {
+      height: 60px;
+      width: auto;
+      max-width: 100%;
+      display: block;
     }
 
-    @media (max-width: 600px) {
-      .header {
-        justify-content: center;
+    /* ===== Otimizações para Impressão Física/PDF ===== */
+    @media print {
+      body {
+        margin: 0;
+        background-color: #fff;
       }
-
-      .logo {
-        font-size: 1.1rem;
-        padding: 6px 12px;
+      .container {
+        max-width: 100%;
+        padding: 0;
       }
-
-      .boleto-title {
-        font-size: 0.9rem;
-        text-align: center;
-        width: 100%;
-      }
-
       .instructions {
-        font-size: 0.85rem;
+        display: none; /* Oculta as instruções de tela na impressão se desejar focar só no boleto */
       }
+      .cut-line {
+        margin: 10px 0;
+      }
+    }
 
-      .instructions .line-editable {
-        max-width: 100%;
-        display: block;
-        margin-top: 2px;
-        word-break: break-word;
-      }
-
-      .boleto-table td,
-      .boleto-table th {
-        padding: 6px 4px;
-        font-size: 0.75rem;
-      }
-
-      .demonstrativo {
-        font-size: 0.78rem;
-        padding: 6px 6px;
-      }
-
-      .small-text {
-        font-size: 0.65rem;
-      }
-
-      .auth-text {
-        font-size: 0.65rem;
-      }
-
-      .barcode {
-        max-width: 100%;
-        height: 48px;
-      }
+    /* ===== Responsividade Mobile ===== */
+    @media (max-width: 600px) {
+      .header { justify-content: space-between; }
+      .logo { font-size: 1.2rem; }
+      .boleto-table td, .boleto-table th { padding: 4px; font-size: 0.75rem; }
+      .boleto-box { overflow-x: auto; } /* Permite scroll horizontal em telas mini para não quebrar a tabela */
     }
   </style>
 </head>
@@ -237,125 +216,120 @@
 
     <header class="header">
       <div class="logo" aria-label="Logo CobAle">CobAle</div>
-      <div class="boleto-title" aria-label="Título do boleto">Boleto CobAle</div>
+      <div class="boleto-title" aria-label="Título do boleto">Recibo do Pagador</div>
     </header>
 
     <section class="instructions" aria-label="Instruções para pagamento do boleto">
-      <p><strong>Imprima e pague seu boleto</strong><br />
-        em qualquer agência bancaria até o vencimento.<br />
-        Não imprima em modo rascunho.</p>
-      <p><strong>Pague pelo internet Banking</strong>
-        <span class="line-editable" aria-label="Linha digitável do boleto">
-          {{ boleto.linha_digitavel }}
-        </span>
+      <p><strong>Imprima e pague seu boleto</strong> em qualquer agência bancária ou casa lotérica até o vencimento.</p>
+      <p><strong>Se preferir, pague pelo Internet Banking copiado a linha digitável:</strong><br />
+        <span class="line-editable" aria-label="Linha digitável do boleto">{{ boleto.linha_digitavel }}</span>
       </p>
     </section>
 
-    <div class="cut-line" aria-hidden="true"><span>Cortar nas linhas pontilhadas</span></div>
+    <div class="cut-line" aria-hidden="true"><span>Corte na linha pontilhada</span></div>
 
     <section class="boleto-box" aria-label="Recibo do Sacado">
-      <table class="boleto-table" role="table" aria-describedby="desc-recibo-sacado">
+      <table class="boleto-table" role="table">
         <thead>
-          <tr class="boleto-header" role="row">
-            <th scope="col">CobAle</th>
-            <th scope="col">Recibo do Sacado</th>
+          <tr class="boleto-header">
+            <th scope="col" style="width: 50%;">CobAle</th>
+            <th scope="col" colspan="3" style="text-align: right;">Recibo do Sacado</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Cedente</strong><br /><b>CobAle Sistema de Cobrança S.A.</b></td>
-            <td><strong>Agência/Cod.Cedente</strong><br />0000-0 / 0000000-0</td>
-            <td><strong>Data do documento</strong><br />00/00/0000</td>
-            <td class="right-align-bold"><strong>Vencimento</strong><br />{{ boleto.vencimento }}</td>
+            <td><label>Cedente</label><strong>CobAle Sistema de Cobrança S.A.</strong></td>
+            <td><label>Agência/Cod. Cedente</label>0000-0 / 0000000-0</td>
+            <td><label>Data de Emissão</label>00/00/0000</td>
+            <td class="right-align-bold"><label>Vencimento</label>{{ boleto.vencimento }}</td>
           </tr>
           <tr>
-            <td><strong>Sacado</strong><br />{{ boleto.sacado }}</td>
-            <td><strong>Numero Documento</strong><br />{{ boleto.nosso_numero }}</td>
-            <td><strong>Filial / Loja</strong><br />{{ boleto.filial_loja }}</td>
-            <td class="right-align-bold"><strong>Valor do Documento</strong><br />R$ {{
-              '%.2f'|format(boleto.valor_documento) }}</td>
+            <td><label>Sacado</label>{{ boleto.sacado }}</td>
+            <td><label>Número Documento</label>{{ boleto.nosso_numero }}</td>
+            <td><label>Filial / Loja</label>{{ boleto.filial_loja }}</td>
+            <td class="right-align-bold"><label>Valor do Documento</label>R$ {{ '%.2f'|format(boleto.valor_documento) }}</td>
           </tr>
         </tbody>
       </table>
 
-      <div class="demonstrativo" id="desc-recibo-sacado" tabindex="0" aria-label="Demonstrativo">
-        <p><strong>{{ boleto.demonstrativo }}</strong></p>
+      <div class="demonstrativo" id="desc-recibo-sacado">
+        <p style="margin-bottom: 5px; font-size: 0.75rem; color:#555; text-transform: uppercase;"><b>Demonstrativo / Instruções de Retenção</b></p>
+        <p>{{ boleto.demonstrativo }}</p>
       </div>
 
       <div class="auth-text" aria-hidden="true">Autenticação mecânica</div>
     </section>
 
-    <div class="cut-line" aria-hidden="true"><span>Cortar nas linhas pontilhadas</span></div>
+    <div class="cut-line" aria-hidden="true"><span>Corte na linha pontilhada</span></div>
 
     <section class="boleto-box" aria-label="Ficha de compensação">
-      <table class="boleto-table" role="table" aria-describedby="desc-ficha-compensacao">
+      <table class="boleto-table" role="table">
         <thead>
-          <tr class="boleto-header" role="row">
-            <th scope="col">CobAle</th>
-            <th scope="col" colspan="5">{{ boleto.linha_digitavel }}</th>
+          <tr class="boleto-header">
+            <th scope="col" style="width: 35%;">CobAle</th>
+            <th scope="col" style="width: 10%; text-align: center;">001-9</th> <th scope="col" colspan="4" style="text-align: right; font-family: monospace; font-size: 0.95rem;">{{ boleto.linha_digitavel }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Local de Pagamento</strong><br />Pagável em qualquer banco até o vencimento</td>
-            <td colspan="5" class="right-align-bold"><strong>Vencimento</strong><br />{{ boleto.vencimento }}</td>
+            <td colspan="5"><label>Local de Pagamento</label>Pagável em qualquer banco até o vencimento</td>
+            <td class="right-align-bold" style="width: 25%; background:#f0f0f0;"><label>Vencimento</label>{{ boleto.vencimento }}</td>
           </tr>
           <tr>
-            <td>
-              <strong>Cedente</strong><br />
-              CobAle Sistema de Cobrança S.A.
+            <td colspan="5"><label>Cedente</label>CobAle Sistema de Cobrança S.A. (CNPJ: 00.000.000/0001-00)</td>
+            <td class="right-align-bold" style="background:#f0f0f0;"><label>Agência / Código Cedente</label>0000-0 / 0000000-0</td>
+          </tr>
+          <tr>
+            <td style="width: 15%;"><label>Data do doc.</label>00/00/0000</td>
+            <td style="width: 15%;"><label>Nº do documento</label>{{ boleto.nosso_numero }}</td>
+            <td style="width: 10%;"><label>Espécie doc.</label>OU</td>
+            <td style="width: 10%;"><label>Aceite</label>N</td>
+            <td style="width: 15%;"><label>Data processamento</label>00/00/0000</td>
+            <td class="right-align-bold" style="background:#f0f0f0;"><label>Nosso Número</label>00/0000000000-A</td>
+          </tr>
+          <tr>
+            <td><label>Uso do Banco</label></td>
+            <td><label>Carteira</label>18</td>
+            <td><label>Espécie</label>R$</td>
+            <td><label>Quantidade</label></td>
+            <td><label>Valor</label></td>
+            <td class="right-align-bold" style="background:#f0f0f0;"><label>(=) Valor do Documento</label><strong>R$ {{ '%.2f'|format(boleto.valor_documento) }}</strong></td>
+          </tr>
+          <tr>
+            <td colspan="5" rowspan="2">
+              <label>Instruções (Todas as instruções de cobrança são de responsabilidade do cedente)</label>
+              <div class="small-text" style="margin-top: 5px;">
+                Sr. Caixa, não receber após o vencimento.<br />
+                Não conceder descontos não especificados na ficha de compensação.
+              </div>
             </td>
-            <td colspan="5" class="right-align-bold">
-              <strong>Agencia/ Código Cedente</strong><br />
-              0000-0 / 0000000-0
-            </td>
+            <td class="right-align-bold"><label>(-) Descontos / Abatimento</label>R$ {{ '%.2f'|format(boleto.desconto) }}</td>
           </tr>
           <tr>
-            <td><strong>Data do documento</strong><br />00/00/0000</td>
-            <td><strong>Numero Documento</strong><br />{{ boleto.nosso_numero }}</td>
-            <td><strong>Espécie doc<br />Outros</strong></td>
-            <td><strong>Aceite</strong><br />N</td>
-            <td><strong>Data Processamento</strong><br />00/00/0000</td>
-            <td><strong>Numero Documento</strong><br />00/0000000000-A</td>
+            <td class="right-align-bold"><label>(+) Mora / Multa</label>R$ {{ '%.2f'|format(boleto.juros) }}</td>
           </tr>
           <tr>
-            <td><strong>Uso do Banco</strong></td>
-            <td><strong>Filial / Loja<br />{{ boleto.filial_loja }}</strong></td>
-            <td><strong>Moeda<br />R$</strong></td>
-            <td><strong>Quantidade</strong></td>
-            <td><strong>Valor</strong></td>
-            <td class="right-align-bold"><strong>(=) Valor do Documento</strong><br />R$ {{
-              '%.2f'|format(boleto.valor_documento) }}</td>
-          </tr>
-          <tr>
-            <td colspan="4" aria-label="Instruções">
-              <strong>Instruções</strong><br />
-              Sr. Caixa, não receber após o vencimento
-            </td>
-            <td><strong>(-) Descontos/Abatimento</strong><br />R$ {{ '%.2f'|format(boleto.desconto) }}</td>
-            <td><strong>(+) Mora/Multa</strong><br />R$ {{ '%.2f'|format(boleto.juros) }}</td>
-          </tr>
-          <tr>
-            <td colspan="4" class="small-text" aria-label="Endereço sacado">
-              Sacado: {{ boleto.sacado }}<br />
+            <td colspan="5" class="small-text">
+              <label>Sacado</label>
+              <strong>{{ boleto.sacado }}</strong><br />
               {{ boleto.endereco_sacado }}<br />
               {{ boleto.cep_sacado }} - {{ boleto.cidade_sacado }}, {{ boleto.estado_sacado }}
             </td>
-            <td colspan="2" class="right-align-bold" style="vertical-align: middle;">
-              <strong>Ficha de Compensação</strong>
+            <td class="right-align-bold" style="vertical-align: middle; background:#f0f0f0;">
+              <label>Autenticação Mecânica</label>
+              <span style="font-size:0.65rem; color:#666;">Ficha de Compensação</span>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="auth-text" aria-hidden="true">Autenticação mecânica</div>
     </section>
 
-    <section class="barcode-container" aria-label="Código de barras visual">
-      <img src="data:image/png;base64,{{ barcode_img }}" alt="Código de barras">
+    <section class="barcode-container" aria-label="Código de barras para leitura">
+      <img src="data:image/png;base64,{{ barcode_img }}" alt="Código de Barras do Boleto">
     </section>
 
-    <footer class="small-text" aria-label="URL do emisor">
-      https://cob-ale.onrender.com
+    <footer class="small-text" style="text-align: center; color: #777; margin-top: 20px;">
+      Documento emitido por CobAle &bull; https://cob-ale.onrender.com
     </footer>
 
   </div>
